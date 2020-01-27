@@ -38,8 +38,8 @@ load_data(): Loads the training data.
     def _generate_set(self, shuffle= True):
            
         n = self.number_of_samples
-        l = self.side_length
-        a = self.grid_size
+        l = self.side_length # side length of the square inside the image
+        a = self.grid_size # Size of image
         e = self.shade_contrast
 
         p = 0.5 #np.random.uniform(0.3,0.7)
@@ -61,7 +61,14 @@ load_data(): Loads the training data.
 
 
             if same[i]==1:
-                shade = np.random.normal(0.4,0.2432) # this sigma is chosen such that the probability of exceeding 0.8 is less than 5%
+                shade = np.random.normal(0.4,0.2432) # this sigma is chosen such 
+                                                     # that the probability of 
+                                                     # exceeding 0.8 is less than 5%
+                if shade < 0:
+                    shade = 0
+                if shade > 1:
+                    shade = 1
+                
                 for j in range(i1-1,i1+l-1):
                     for k in range(j1-1,j1+l-1):
                         data[i,j,k]=shade
@@ -72,6 +79,17 @@ load_data(): Loads the training data.
             else:
                 shade1 = np.random.normal(0.4,0.2432)
                 shade2 = np.random.normal(0.4,0.2432)
+                
+                # Ensure all colours lie in the interval [0, 1].
+                if shade1 < 0:
+                    shade1 = 0
+                if shade1 > 1:
+                    shade1 = 1
+                if shade2 < 0:
+                    shade2 = 0
+                if shade2 > 1:
+                    shade2 = 1
+                
                 if abs(shade2-shade1)<e:
                     shade2 = shade1 + e
                 for j in range(i1-1,i1+l-1):
