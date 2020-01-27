@@ -98,6 +98,9 @@ load_data(): Loads the training data.
                 for j in range(i2-1,i2+l-1):
                     for k in range(j2-1,j2+l-1):
                         data[i,j,k]=shade2
+                if shade2>1:
+                    shade1 = shade1 - (shade2 - 1)
+                    shade2 = 1
 
         data = np.expand_dims(data, axis = 3)
 
