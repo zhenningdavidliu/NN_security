@@ -82,7 +82,16 @@ if __name__=='__main__':
 
     with open(all_path_labels, 'w') as f:
         for j in range(n):
-            f.write("{}\n".format(j))
+            f.write("{}\n".format(pred_labels[j]))
+
+    all_path_confidences = join(all_path, "confidences.txt")
+    
+    temp = np.around(results, decimals=2)
+    pred_conf = [a for a in list(zip(*temp))[0]]
+
+    with open(all_path_confidences, "w") as f:
+        for j in range(n):
+            f.write("{}/n".format(pred_conf[j]))
 
     mistakes_path = join("experiment","wrong")
 
@@ -98,3 +107,9 @@ if __name__=='__main__':
     with open(mistakes_label, 'w') as f:
         for item in correct_labels:
             f.write("{}\n".format(item))
+
+    mistakes_confidences = join(mistakes_path, "confidence.txt")
+
+    with open(mistakes_confidences, "w") as f:
+        for j in wrongly_labeled_images:
+            f.write("{}\n".format(pred_conf[j]))
