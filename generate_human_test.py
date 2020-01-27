@@ -91,7 +91,7 @@ if __name__=='__main__':
 
     with open(all_path_confidences, "w") as f:
         for j in range(n):
-            f.write("{}/n".format(pred_conf[j]))
+            f.write("{}\n".format(pred_conf[j]))
 
     mistakes_path = join("experiment","wrong")
 
