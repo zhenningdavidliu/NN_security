@@ -1,0 +1,26 @@
+TEST:
+    arguments:
+        number_of_samples: 100
+        grid_size: 32
+        side_length: 4
+        shade_contrast: 0.1
+    
+MODEL: 
+    name: cnndrop
+    arguments:
+        act: relu
+        final_act : sigmoid
+
+TRAIN:
+    optim:
+        type: adam
+        arguments:
+            param1: none
+
+    loss:
+        type: binary_crossentropy
+        arguments:
+            param1: none
+
+    metrics:
+        metric1: accuracy
