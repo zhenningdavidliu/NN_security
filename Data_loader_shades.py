@@ -50,15 +50,15 @@ load_data(): Loads the training data.
         diff = np.zeros(n)
         for i in range(n):
 
-            i1 = np.random.randint(1,a-l) 
-            j1 = np.random.randint(1,a-l) 
+            i1 = np.random.randint(a-l) 
+            j1 = np.random.randint(a-l) 
         
-            i2 = np.random.randint(1,a-l) 
-            j2 = np.random.randint(1,a-l) 
+            i2 = np.random.randint(a-l) 
+            j2 = np.random.randint(a-l) 
 
             while ((abs(i2-i1)<=l) and (abs(j2-j1)<=l)): # To prevent overlap
-                i2 = np.random.randint(1,a-l)
-                j2 = np.random.randint(1,a-l)
+                i2 = np.random.randint(a-l)
+                j2 = np.random.randint(a-l)
 
 
             if same[i]==1:
@@ -67,14 +67,14 @@ load_data(): Loads the training data.
                                                      # exceeding 0.8 is less than 5%
                 if shade < 0:
                     shade = 0
-                if shade > 1:
-                    shade = 1
+                if shade > 0.8:
+                    shade = 0.8
                 
-                for j in range(i1-1,i1+l-1):
-                    for k in range(j1-1,j1+l-1):
+                for j in range(i1,i1+l):
+                    for k in range(j1,j1+l):
                         data[i,j,k]=shade
-                for j in range(i2-1,i2+l-1):
-                    for k in range(j2-1,j2+l-1):
+                for j in range(i2,i2+l):
+                    for k in range(j2,j2+l):
                         data[i,j,k]=shade
                 label[i,0] = 1
             else:
@@ -84,27 +84,27 @@ load_data(): Loads the training data.
                 # Ensure all colours lie in the interval [0, 1].
                 if shade1 < 0:
                     shade1 = 0
-                if shade1 > 1:
-                    shade1 = 1
+                if shade1 > 0.8:
+                    shade1 = 0.8
                 if shade2 < 0:
                     shade2 = 0
-                if shade2 > 1:
-                    shade2 = 1
+                if shade2 > 0.8:
+                    shade2 = 0.8
                 
-                if abs(shade2-shade1)<e:
+                if (abs(shade2-shade1) < e):
                     shade2 = shade1 + e
                 
-                if shade2>1:
-                    shade1 = shade1 - (shade2 - 1)
-                    shade2 = 1
+                if shade2>0.8:
+                    shade1 = shade1 - (shade2 - 0.8)
+                    shade2 = 0.8
  
-                for j in range(i1-1,i1+l-1):
-                    for k in range(j1-1,j1+l-1):
+                for j in range(i1,i1+l):
+                    for k in range(j1,j1+l):
                         data[i,j,k]=shade1
-                for j in range(i2-1,i2+l-1):
-                    for k in range(j2-1,j2+l-1):
+                for j in range(i2,i2+l):
+                    for k in range(j2,j2+l):
                         data[i,j,k]=shade2
-               if abs(shade2-shade1)>=0.2:
+                if abs(shade2-shade1)>=0.2:
                     diff[i] = 1
 
         data = np.expand_dims(data, axis = 3)

@@ -9,6 +9,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Activation, Conv1D, Conv2D, Flatten
 import os
 from os.path import join
+from PIL import Image
 
 '''
 This program will load the weights saved for a network solving the shades of grey squares experiment
@@ -90,18 +91,27 @@ if __name__=='__main__':
 
     all_path = join("experiment","all")
 
+    color_mode = 'L'
+
     for j in range(n):
+        '''
         plt.figure()
         plt.imshow(experiment_data[j].reshape(32,32), cmap="gray")
         temp_path = join(all_path,"picture_{:03d}.png".format(j))
         plt.savefig(temp_path)
         plt.close()
+        '''
+        X = 255*experiment_data[j].reshape(32,32)
+        Y = X.astype(np.uint8)
 
+        im = Image.fromarray(Y,mode=color_mode)
+        temp_path = join(all_path,"picture_{:03d}.png".format(j))
+        im.save(temp_path)
     all_path_labels = join(all_path,"labels.txt")
 
     with open(all_path_labels, 'w') as f:
         for j in range(n):
-            f.write("{}\n".format(pred_labels[j]))
+            f.write("The label for {} is {}\n".format(j, pred_labels[j]))
 
     all_path_confidences = join(all_path, "confidences.txt")
     
@@ -110,7 +120,7 @@ if __name__=='__main__':
 
     with open(all_path_confidences, "w") as f:
         for j in range(n):
-            f.write("{}\n".format(pred_conf[j]))
+            f.write("On picture number {} the confidence is: {}\n".format(j, pred_conf[j]))
 
     mistakes_path = join("experiment","wrong")
 
@@ -131,7 +141,7 @@ if __name__=='__main__':
 
     with open(mistakes_confidences, "w") as f:
         for j in wrongly_labeled_images:
-            f.write("{}\n".format(pred_conf[j]))
+            f.write("On the picture number {}, the confidence is{}\n".format(j, pred_conf[j]))
 
     big_contrast_mistakes = join(mistakes_path, "big_contrast.txt")
 
