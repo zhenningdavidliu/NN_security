@@ -93,16 +93,18 @@ load_data(): Loads the training data.
                 
                 if abs(shade2-shade1)<e:
                     shade2 = shade1 + e
+                
+                if shade2>1:
+                    shade1 = shade1 - (shade2 - 1)
+                    shade2 = 1
+ 
                 for j in range(i1-1,i1+l-1):
                     for k in range(j1-1,j1+l-1):
                         data[i,j,k]=shade1
                 for j in range(i2-1,i2+l-1):
                     for k in range(j2-1,j2+l-1):
                         data[i,j,k]=shade2
-                if shade2>1:
-                    shade1 = shade1 - (shade2 - 1)
-                    shade2 = 1
-                if abs(shade2-shade1)>=0.2:
+               if abs(shade2-shade1)>=0.2:
                     diff[i] = 1
 
         data = np.expand_dims(data, axis = 3)
