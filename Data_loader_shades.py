@@ -31,9 +31,9 @@ load_data(): Loads the training data.
 
     def load_data(self):
 
-        data, label = self._generate_set()
+        data, label, diff = self._generate_set()
 
-        return data, label
+        return data, label, diff
 
     def _generate_set(self, shuffle= True):
            
@@ -47,6 +47,7 @@ load_data(): Loads the training data.
 
         data = np.ones([n,a,a])
         label = np.zeros([n,1])
+        diff = np.zeros(n)
         for i in range(n):
 
             i1 = np.random.randint(1,a-l) 
@@ -101,10 +102,12 @@ load_data(): Loads the training data.
                 if shade2>1:
                     shade1 = shade1 - (shade2 - 1)
                     shade2 = 1
+                if abs(shade2-shade1)>=0.2:
+                    diff[i] = 1
 
         data = np.expand_dims(data, axis = 3)
 
-        return data, label
+        return data, label, diff
 
 
                 

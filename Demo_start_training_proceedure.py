@@ -100,8 +100,8 @@ Use gpu: {}""".format(use_gpu))
     print('DATASET VALIDATION')
     print(data_loader_validate)
 
-    train_data, train_labels = data_loader_train.load_data();
-    val_data, val_labels = data_loader_validate.load_data();
+    train_data, train_labels, train_diff= data_loader_train.load_data();
+    val_data, val_labels, val_diff = data_loader_validate.load_data();
 
     # Get input and output shape
     input_shape = train_data.shape[1:]
@@ -248,7 +248,7 @@ Model dest: {}""".format(model_number_type, model_number, dest_model))
     print('\nDATASET TEST')
     print(data_loader_test)
 
-    test_data, test_labels = data_loader_test.load_data()
+    test_data, test_labels, test_diff = data_loader_test.load_data()
     score = model.evaluate(test_data, test_labels, verbose=0)
     print('Accuracy on test set: {}%'.format(100*score[1]))
 

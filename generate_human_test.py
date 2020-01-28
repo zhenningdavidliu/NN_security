@@ -65,7 +65,7 @@ if __name__=='__main__':
                   metrics = metric_list)
 
     data_experiment = Data_loader_shades(cgf['TEST']['arguments'])
-    experiment_data, experiment_labels = data_experiment.load_data()
+    experiment_data, experiment_labels, experiment_diff = data_experiment.load_data()
 
     results = model.predict(experiment_data)
 
@@ -75,6 +75,7 @@ if __name__=='__main__':
     acc = 0
     wrongly_labeled_images = list() 
     correct_labels = list()
+    big_contrast_mistakes_images = list()
 
     for i in range(n):
         if pred_labels[i] == experiment_labels[i]:
@@ -82,6 +83,8 @@ if __name__=='__main__':
         else: 
             wrongly_labeled_images.append(i)
             correct_labels.append(["Picture number {}".format(i),experiment_labels[i]])
+            if experiment_diff[i] ==1:
+                big_contrast_mistakes_images.append(i)
 
     print("The percentage of correct labels is {} %".format(100*acc/n))
 
@@ -129,3 +132,9 @@ if __name__=='__main__':
     with open(mistakes_confidences, "w") as f:
         for j in wrongly_labeled_images:
             f.write("{}\n".format(pred_conf[j]))
+
+    big_contrast_mistakes = join(mistakes_path, "big_contrast.txt")
+
+    with open(big_contrast_mistakes, "w") as f:
+        for j in big_contrast_mistakes_images:
+            f.write("{}\n".format([j]))
