@@ -17,14 +17,16 @@ load_data(): Loads the training data.
 """
     def __init__(self, arguments):
         super(Data_loader_lines, self).__init__(arguments)
-        required_keys = ['number_of_samples', 'grid_size', 'side_length', 'width']
+        required_keys = ['number_of_samples', 'grid_size', 'side_length', 'width','save','images','labels']
 
         self._check_for_valid_arguments(required_keys, arguments)
         self.number_of_samples = arguments['number_of_samples']
         self.grid_size = arguments['grid_size']
         self.side_length = arguments['side_length']
         self.width= arguments['width']
-
+        self.save = arguments['save']
+        self.images = arguments['images']
+        self.labels = arguments['labels']
     def load_data(self):
         data, label = self._generate_set()
         
@@ -59,5 +61,9 @@ load_data(): Loads the training data.
                 label[i] = 1
 
         data = np.expand_dims(data, axis =3)
+
+        if self.save == "True":
+            np.save(self.images,data)
+            np.save(self.labels,label)
 
         return data, label

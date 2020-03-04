@@ -1,0 +1,92 @@
+DATASET_TRAIN:
+    name: lines_train
+    arguments:
+        number_of_samples: 30000
+        grid_size: 128 
+        side_length: 40
+        width: 5
+        save: True
+        images: data_train_images.vim
+        labels: data_train_labels.vim
+DATASET_VAL:
+    name: lines_val 
+    arguments:
+        number_of_samples: 2000
+        grid_size: 128 
+        side_length: 40 
+        width: 5
+        save: True
+        images: data_val_images.vim
+        labels: data_val_labels.vim
+DATASET_TEST:
+    name: lines_test 
+    arguments:
+        number_of_samples: 1000
+        grid_size: 128 
+        side_length: 40
+        width: 5
+        save: True
+        images: data_test_images.vim
+        labels: data_test_labels.vim
+MODEL:
+    name: cnndrop 
+    arguments:    
+        act: relu
+        final_act: sigmoid
+        bias_initializer: zeros
+
+MODEL_METADATA:
+    precision: float64
+    save_final_model: yes
+    dest_model: model
+    model_number_type: fixed
+    model_number_arguments:
+        model_id: 9
+        counter_path: ./
+    save_best_model:
+        use_model_checkpoint: yes
+        arguments:
+            filepath: best_model_demo.h5
+            monitor: val_acc
+            verbose: 1
+            save_best_only: False
+            mode: max
+            period: 1
+
+TRAIN:
+    batch_size: 60
+    shuffle: no
+    validate_every: 50
+    optim:
+        type: adam
+        arguments:
+            param1: none
+    max_epoch: 10
+    stopping_criteria:
+        type: EarlyStopping
+        arguments:
+            monitor: val_acc
+            mode: auto
+            verbose: 1
+            patience: 5
+
+    loss:
+        type: binary_crossentropy
+        arguments:
+            param1: none
+    metrics:
+        metric1: accuracy
+
+COMPUTER_SETUP:
+    use_gpu: yes
+    compute_node: 3
+
+INFORMATION_TRAIN:
+    save_every: 10
+    print_every: 10
+    plot:
+        font_size: 15
+        loss_train: no
+        accuracy_train: no
+
+

@@ -12,6 +12,7 @@ from nn_tools import read_count
 import tensorflow as tf
 from Data_loader_shades import Data_loader_shades
 from Data_loader_lines import Data_loader_lines
+from Data_loader_existing_lines import Data_loader_existing_lines
 import model_builders as mb
 from SaveWeights import MyCallback
 import os
@@ -41,6 +42,12 @@ and it returns None.
         return Data_loader_lines(arguments)
     elif data_name.lower() == "lines_test":
         return Data_loader_lines(arguments)
+    elif data_name.lower() == "load_lines_train":
+        return Data_loader_existing_lines(arguments) 
+    elif data_name.lower() == "load_lines_val":
+        return Data_loader_existing_lines(arguments) 
+    elif data_name.lower() == "load_lines_test":
+        return Data_loader_existing_lines(arguments) 
     else:
         print('Error: Could not find data loader with name %s' % (data_name))
         return None;
