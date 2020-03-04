@@ -11,6 +11,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from nn_tools import read_count
 import tensorflow as tf
 from Data_loader_shades import Data_loader_shades
+from Data_loader_lines import Data_loader_lines
 import model_builders as mb
 from SaveWeights import MyCallback
 import os
@@ -34,6 +35,12 @@ and it returns None.
         return Data_loader_shades(arguments)
     elif data_name.lower() == "shades_test":
         return Data_loader_shades(arguments)
+    elif data_name.lower() == "lines_train":
+        return Data_loader_lines(arguments)
+    elif data_name.lower() == "lines_val":
+        return Data_loader_lines(arguments)
+    elif data_name.lower() == "lines_test":
+        return Data_loader_lines(arguments)
     else:
         print('Error: Could not find data loader with name %s' % (data_name))
         return None;
@@ -71,7 +78,7 @@ if __name__ == "__main__":
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
     
     # Load configuration file
-    with open('config.yml') as ymlfile:
+    with open('config_lines.yml') as ymlfile:
         cgf = yaml.load(ymlfile, Loader=yaml.SafeLoader);
 
     # Set up computational resource 
@@ -100,8 +107,8 @@ Use gpu: {}""".format(use_gpu))
     print('DATASET VALIDATION')
     print(data_loader_validate)
 
-    train_data, train_labels, train_diff= data_loader_train.load_data();
-    val_data, val_labels, val_diff = data_loader_validate.load_data();
+    train_data, train_labels = data_loader_train.load_data();
+    val_data, val_labels = data_loader_validate.load_data();
 
     # Get input and output shape
     input_shape = train_data.shape[1:]
@@ -248,7 +255,7 @@ Model dest: {}""".format(model_number_type, model_number, dest_model))
     print('\nDATASET TEST')
     print(data_loader_test)
 
-    test_data, test_labels, test_diff = data_loader_test.load_data()
+    test_data, test_labels = data_loader_test.load_data()
     score = model.evaluate(test_data, test_labels, verbose=0)
     print('Accuracy on test set: {}%'.format(100*score[1]))
 
