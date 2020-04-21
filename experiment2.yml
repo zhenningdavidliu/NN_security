@@ -1,12 +1,16 @@
 TEST:
     arguments:
-        number_of_samples: 10000
-        grid_size: 64
-        side_length: 4
-        shade_contrast: 0.2
-    
+        number_of_samples: 1000
+        grid_size: 128 
+        side_length: 30
+        width: 4
+        shift: True
+        epsilon: -0.01
+        save: False 
+        images: "data_test_images"
+        labels: "data_test_labels" 
 MODEL: 
-    name: cnndrop
+    name: cnndrop 
     arguments:
         act: relu
         final_act : sigmoid

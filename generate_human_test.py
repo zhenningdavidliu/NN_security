@@ -5,6 +5,7 @@ import tensorflow
 import model_builders as mb
 import tensorflow as tf
 from Data_loader_shades import Data_loader_shades
+from Data_loader_lines import Data_loader_lines
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Activation, Conv1D, Conv2D, Flatten
 import os
@@ -52,6 +53,8 @@ if __name__=='__main__':
 
     if cgf['MODEL']['name'].lower() == 'cnndrop':
         model = mb.build_model_cnndrop(input_shape, output_shape, cgf['MODEL']['arguments'])
+    elif cgf['MODEL']['name'].lower() == 'fc3':
+        model = mb.build_model_fc3(input_shape, output_shape, cgf['MODEL']['arguments'])
     else:
         print('Error: model not found')
     
@@ -66,7 +69,7 @@ if __name__=='__main__':
                   metrics = metric_list)
 
     data_experiment = Data_loader_shades(cgf['TEST']['arguments'])
-    experiment_data, experiment_labels, experiment_diff = data_experiment.load_data()
+    experiment_data, experiment_labels, experiment_diff= data_experiment.load_data2()
 
     results = model.predict(experiment_data)
 
@@ -77,21 +80,34 @@ if __name__=='__main__':
     wrongly_labeled_images = list() 
     correct_labels = list()
     big_contrast_mistakes_images = list()
-
+    strongly_confident_mistake = list()
+ 
+    temp = np.around(results, decimals=2)
+    pred_conf = [a for a in list(zip(*temp))[0]]
+    
     for i in range(n):
         if pred_labels[i] == experiment_labels[i]:
             acc += 1
         else: 
             wrongly_labeled_images.append(i)
             correct_labels.append(["Picture number {}".format(i),experiment_labels[i]])
+            ''' 
             if experiment_diff[i] ==1:
                 big_contrast_mistakes_images.append(i)
-
+            '''
+            if abs(pred_labels[i] - pred_conf[i])<0.25:
+                strongly_confident_mistake.append(i)
+    
     print("The percentage of correct labels is {} %".format(100*acc/n))
+    print("The percentage of wrong labels with high confidence is {} %".format(100*len(strongly_confident_mistake)/n))
+    print("The percentage of wrong labels with high confidence amongst wrong labels is {} %".format(100*len(strongly_confident_mistake)/(n-acc)))
+   
 
     all_path = join("experiment","all")
 
     color_mode = 'L'
+
+    A_kron = np.ones([10,10]) #matrix for Kronecker product(zooms in)
 
     for j in range(n):
         '''
@@ -101,7 +117,8 @@ if __name__=='__main__':
         plt.savefig(temp_path)
         plt.close()
         '''
-        X = 255*experiment_data[j].reshape(32,32)
+        X = 255*experiment_data[j].reshape(l,l)
+        X = np.kron(X,A_kron)
         Y = X.astype(np.uint8)
 
         im = Image.fromarray(Y,mode=color_mode)
@@ -125,11 +142,23 @@ if __name__=='__main__':
     mistakes_path = join("experiment","wrong")
 
     for j in wrongly_labeled_images:
+        '''
         plt.figure()
         plt.imshow(experiment_data[j].reshape(32,32), cmap="gray")
         temp_path = join(mistakes_path,"picture_{:03d}.png".format(j))
         plt.savefig(temp_path)
         plt.close()
+        '''
+        X = 255*experiment_data[j].reshape(l,l)
+        X = np.kron(X,A_kron)
+        Y = X.astype(np.uint8)
+        
+
+        im = Image.fromarray(Y,mode=color_mode)
+        temp_path = join(mistakes_path,"picture_{:03d}.png".format(j))
+        im.save(temp_path)
+        print(temp_path)
+
 
     mistakes_label = join(mistakes_path, "labels.txt") 
 
@@ -140,8 +169,10 @@ if __name__=='__main__':
     mistakes_confidences = join(mistakes_path, "confidence.txt")
 
     with open(mistakes_confidences, "w") as f:
+        f.write("The percentage of wrong labels with high confidence is {} %\n".format(100*len(strongly_confident_mistake)/n))
+        f.write("The percentage of wrong labels with high confidence amongst wrong labels is {} %\n".format(100*len(strongly_confident_mistake)/(n-acc)))
         for j in wrongly_labeled_images:
-            f.write("On the picture number {}, the confidence is{}\n".format(j, pred_conf[j]))
+            f.write("On the picture number {}, the confidence is {}\n".format(j, pred_conf[j]))
 
     big_contrast_mistakes = join(mistakes_path, "big_contrast.txt")
 

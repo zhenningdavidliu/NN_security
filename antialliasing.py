@@ -30,27 +30,28 @@ def rotated_stripe(x, y, l, w, angle, grid_size):
     y4 = y3 + int(round(l*sin(angle*math.pi/180)))
 
 
-    for i in range(x, x2 + np.sign(x2-x), np.sign(x2-x)):
-        for j in range(y, y2 + np.sign(y2-y), np.sign(y2-y)):
-            if calc_dist(x, y, x2, y2, i, j) < 1:
-                data[i,j] = calc_dist(x, y, x2, y2, i, j)
-    
-    for i in range(x, x3 + np.sign(x3-x), np.sign(x3-x)):
-        for j in range(y, y3 + np.sign(y3-y), np.sign(y3-y)):
-            if calc_dist(x, y, x3, y3, i, j) < 1:
-                data[i,j] = calc_dist(x, y, x3, y3, i, j)
+    if (x2!=x) and (y2!=y):
+        for i in range(x, x2 + np.sign(x2-x), np.sign(x2-x)):
+            for j in range(y, y2 + np.sign(y2-y), np.sign(y2-y)):
+                if calc_dist(x, y, x2, y2, i, j) < 1:
+                    data[i,j] = calc_dist(x, y, x2, y2, i, j)
+    if (x3!=x) and(y3!=y):    
+        for i in range(x, x3 + np.sign(x3-x), np.sign(x3-x)):
+            for j in range(y, y3 + np.sign(y3-y), np.sign(y3-y)):
+                if calc_dist(x, y, x3, y3, i, j) < 1:
+                    data[i,j] = calc_dist(x, y, x3, y3, i, j)
+    if (x4!=x2) and (y4!=y2):
+        for i in range(x2, x4 + np.sign(x4-x2), np.sign(x4-x2)):
+            for j in range(y2, y4 + np.sign(y4-y2), np.sign(y4-y2)):
+                if calc_dist(x4, y4, x2, y2, i, j) < 1:
+                    data[i,j] = calc_dist(x2, y2, x4, y4, i, j)
 
-    for i in range(x2, x4 + np.sign(x4-x2), np.sign(x4-x2)):
-        for j in range(y2, y4 + np.sign(y4-y2), np.sign(y4-y2)):
-            if calc_dist(x4, y4, x2, y2, i, j) < 1:
-                data[i,j] = calc_dist(x2, y2, x4, y4, i, j)
-
- 
-    for i in range(x3, x4 + np.sign(x4-x3), np.sign(x4-x3)):
-        for j in range(y3, y4 + np.sign(y4-y3), np.sign(y4-y3)):
-            if calc_dist(x4, y4, x3, y3, i, j) < 1:
-                data[i,j] = calc_dist(x3, y3, x4, y4, i, j)
-    
+    if (x4!=x3) and (y4!=y3):
+        for i in range(x3, x4 + np.sign(x4-x3), np.sign(x4-x3)):
+            for j in range(y3, y4 + np.sign(y4-y3), np.sign(y4-y3)):
+                if calc_dist(x4, y4, x3, y3, i, j) < 1:
+                    data[i,j] = calc_dist(x3, y3, x4, y4, i, j)
+        
     min_x = min(x, x2, x3, x4)
     max_x = max(x, x2, x3, x4)
     min_y = min(y, y2, y3, y4)

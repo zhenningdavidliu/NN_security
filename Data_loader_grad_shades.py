@@ -2,7 +2,7 @@ from Data_loader import Data_loader
 import numpy as np
 import random
 
-class Data_loader_shades(Data_loader):
+class Data_loader_grad_shades(Data_loader):
     """
 This experiment is creating squares collored in different shades of grey and checking how humans and AI compare in both
 accuracy and confidence estimate. We set the squares to have a fixed length and all squares have to be fully withing the
@@ -20,7 +20,7 @@ Methods
 load_data(): Loads the training data.
 """
     def __init__(self, arguments):
-        super(Data_loader_shades, self).__init__(arguments)
+        super(Data_loader_grad_shades, self).__init__(arguments)
         required_keys = ['number_of_samples', 'grid_size', 'side_length', 'shade_contrast']
 
         self._check_for_valid_arguments(required_keys, arguments)
@@ -175,6 +175,14 @@ load_data(): Loads the training data.
             
             if shade1>shade2:
                 label[i] = 1 # Left is brighter
+
+        gradback = np.zeros((a,a))
+
+        for i in range(a):
+            gradback[:,i] = i*0.05/(a-1)
+
+        for j in range(n):
+            data[j,:,:] += gradback
 
         data = np.expand_dims(data, axis = 3)
 

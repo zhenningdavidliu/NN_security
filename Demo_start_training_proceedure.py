@@ -13,6 +13,8 @@ import tensorflow as tf
 from Data_loader_shades import Data_loader_shades
 from Data_loader_lines import Data_loader_lines
 from Data_loader_existing_lines import Data_loader_existing_lines
+from Data_loader_grad_lines import Data_loader_grad_lines
+from Data_loader_grad_shades import Data_loader_grad_shades
 import model_builders as mb
 from SaveWeights import MyCallback
 import os
@@ -32,22 +34,16 @@ Returns
 Data loader with name `data_name`. If not found, an error message is printed
 and it returns None.
 """
-    if data_name.lower() == "shades_train":
+    if (data_name.lower() == "shades_train") or (data_name.lower() == "shades_val") or (data_name.lower() == "shades_test"):
         return Data_loader_shades(arguments)
-    elif data_name.lower() == "shades_test":
-        return Data_loader_shades(arguments)
-    elif data_name.lower() == "lines_train":
-        return Data_loader_lines(arguments)
-    elif data_name.lower() == "lines_val":
-        return Data_loader_lines(arguments)
-    elif data_name.lower() == "lines_test":
-        return Data_loader_lines(arguments)
-    elif data_name.lower() == "load_lines_train":
+    elif (data_name.lower() == "lines_train") or (data_name.lower() == "lines_val") or (data_name.lower() == "lines_test"):
+        return Data_loader_lines(arguments)   
+    elif (data_name.lower() == "load_lines_train") or (data_name.lower() == "load_lines_val") or (data_name.lower() == "load_lines_test"):
         return Data_loader_existing_lines(arguments) 
-    elif data_name.lower() == "load_lines_val":
-        return Data_loader_existing_lines(arguments) 
-    elif data_name.lower() == "load_lines_test":
-        return Data_loader_existing_lines(arguments) 
+    elif (data_name.lower() == "glines_train") or (data_name.lower() == "glines_val") or (data_name.lower() == "glines_test"):
+        return Data_loader_grad_lines(arguments) 
+    elif (data_name.lower() == "gshades_train") or (data_name.lower() == "gshades_val") or (data_name.lower() == "gshades_test"):
+        return Data_loader_grad_shades(arguments) 
     else:
         print('Error: Could not find data loader with name %s' % (data_name))
         return None;
@@ -85,7 +81,8 @@ if __name__ == "__main__":
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
     
     # Load configuration file
-    with open('config_lines.yml') as ymlfile:
+    configfile = 'config.yml'
+    with open(configfile) as ymlfile:
         cgf = yaml.load(ymlfile, Loader=yaml.SafeLoader);
 
     # Set up computational resource 
@@ -114,8 +111,12 @@ Use gpu: {}""".format(use_gpu))
     print('DATASET VALIDATION')
     print(data_loader_validate)
 
-    train_data, train_labels = data_loader_train.load_data();
-    val_data, val_labels = data_loader_validate.load_data();
+    if configfile == 'config_lines.yml':
+        train_data, train_labels = data_loader_train.load_data();
+        val_data, val_labels = data_loader_validate.load_data();
+    elif configfile == 'config.yml':
+        train_data, train_labels, train_dif = data_loader_train.load_data();
+        val_data, val_labels, val_dif = data_loader_validate.load_data();
 
     # Get input and output shape
     input_shape = train_data.shape[1:]
@@ -252,17 +253,22 @@ Model dest: {}""".format(model_number_type, model_number, dest_model))
         print('Saved model as {}'.format(full_file_name))
 
     # plot the loss history
+    '''
     plt.figure()
     loss_hist = history.history['loss'][int(max_epoch/2):]
     index = np.linspace(max_epoch/2+1, max_epoch, max_epoch/2);
     plt.plot(index,loss_hist);
     plt.savefig(join(full_dest_model, 'loss_graph.png'));
+    '''
     # Load and test model on test set
     data_loader_test = data_selector(cgf['DATASET_TEST']['name'], cgf['DATASET_TEST']['arguments'])
     print('\nDATASET TEST')
     print(data_loader_test)
-
-    test_data, test_labels = data_loader_test.load_data()
+    
+    if configfile == 'config_lines.yml':
+        test_data, test_labels = data_loader_test.load_data()
+    elif configfile == 'config.yml':
+        test_data, test_labels, test_diff = data_loader_test.load_data()
     score = model.evaluate(test_data, test_labels, verbose=0)
     print('Accuracy on test set: {}%'.format(100*score[1]))
 
