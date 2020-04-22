@@ -1,0 +1,29 @@
+
+data_name: stripe_test
+data_arguments:
+    grid_size: 32
+    line_width:  3
+    a: 0.01
+    flip_a_values: False 
+    data_size: 1000
+    low_a_value: 0.009
+
+#data_name: stripe_train
+#data_arguments:
+#    grid_size: 32
+#    line_width:  3
+#    a: 0.01
+#    flip_a_values: False
+#
+#data_name: lines_train
+#data_arguments:
+#    number_of_samples: 100
+#    grid_size: 128 
+#    side_length: 80
+#    width: 4
+#    shift: True
+#    epsilon: 1
+#    save: False 
+#    images: "data_trainn_images"
+#    labels: "data_trainn_labels"
+
