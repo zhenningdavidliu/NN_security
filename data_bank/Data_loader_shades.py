@@ -43,7 +43,7 @@ shade_contrast: 0.1
         # Two squares different or same shades
         data, label, diff = self._generate_set()
 
-        return data, label, diff
+        return data, label
 
     def _generate_set(self, shuffle= True):
            
