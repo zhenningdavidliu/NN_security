@@ -11,7 +11,9 @@ from os.path import join
 class Data_loader_lines(Data_loader):
     """
 This experiment is creating tilted lines and checking how humans and AI compare in both
-accuracy and confidence estimate. 
+accuracy and confidence estimate.
+
+WITH COLORSHIFT
 ----------
 number_of_samples (int): Number of images generated for the test
 grid_size (int): Size of images (grid_size x grid_size)
@@ -38,16 +40,6 @@ load_data(): Loads the training data.
         data, label = self._generate_set()
         
         return data, label 
-
-    def load_data2(self):
-        data, label = self._generate_set2()
-
-        return data, label
-
-    def load_data3(self):
-        data, label = self._generate_set3()
-
-        return data, label
 
     def _generate_set(self, shuffle= True):
         
@@ -83,12 +75,12 @@ load_data(): Loads the training data.
             
             if angle[i]<45:
                 label[i] = 1
-            '''
+            
                 if shift == True:
                     data[i,:,:] += epsilon     
             elif shift == True:
                     data[i,:,:] -= epsilon
-            '''
+            
         data = np.expand_dims(data, axis =3)
         image_link = join("data",self.images)
         label_link = join("data",self.images)
@@ -97,7 +89,7 @@ load_data(): Loads the training data.
             np.save(label_link,label)
 
         return data, label
-
+    '''
     def _generate_set2(self):
 
         n = self.number_of_samples
@@ -165,20 +157,20 @@ load_data(): Loads the training data.
            
                 if shift == True:
                     data[i] += ep
-                '''
+                
                     if epsilon > 0:
                         data[i] = data[i]*(1-epsilon)
                     else:
                         data[i] = data[i]*(1+epsilon) - epsilon 
-                '''
+               
             elif shift == True:
                 data[i] -= ep
-                '''
+                
                 if epsilon > 0 :
                     data[i] = epsilon + data[i]*(1-epsilon)
                 else:
                     data[i] = data[i]*(1+epsilon)
-                '''
+                
         data = np.expand_dims(data, axis =3)
         image_link = join("data",self.images)
         label_link = join("data",self.images)
@@ -189,7 +181,7 @@ load_data(): Loads the training data.
 
         return data, label
 
-
+    '''
 if __name__ =="__main__":
 
     with open("config_lines.yml") as ymlfile:
