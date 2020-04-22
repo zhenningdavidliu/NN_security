@@ -13,14 +13,40 @@ class Data_loader_lines(Data_loader):
 This experiment is creating tilted lines and checking how humans and AI compare in both
 accuracy and confidence estimate.
 
-WITH COLORSHIFT
+Images with a stripe are generated. The stripe is located somewhere in the image and its
+position is determined randomly. There is also a colorshift introduced here which if is set
+to be extant (shift == True) then all images with angle < 45 are shifted by a value "color_shift"
+and all images with an angle > 45 are shifted by "-color_shift".
+
+Attributes
 ----------
 number_of_samples (int): Number of images generated for the test
 grid_size (int): Size of images (grid_size x grid_size)
+side_length (int): The length of the stripe.
+width (int): Width of the stripe.
+save (bool): Whether the generated images are saved to a text file for future usage.(Since it may take a while)
+images (string): The name of the file into which the generated images are saved (if save == True).
+labels (string): The name of the file into which the generated labels are saved (if save == True).
+shift (bool): Whether we want a color perturbation.
+color_shift (float): The value by which the images are changed by.
 
 Methods
 -------
 load_data(): Loads the training data.
+
+Example arguments
+-----------------
+number_of_samples: 10000
+grid_size: 128
+side_length: 30
+width: 4
+shift: True
+color_shift: 0.01
+save: True
+images: data_train_images
+labels: data_train_labels
+-----------------
+
 """
     def __init__(self, arguments):
         super(Data_loader_lines, self).__init__(arguments)
@@ -35,7 +61,7 @@ load_data(): Loads the training data.
         self.images = arguments['images']
         self.labels = arguments['labels']
         self.shift = arguments['shift']
-        self.epsilon = arguments['epsilon']
+        self.color_shift = arguments['color_shift']
     def load_data(self):
         data, label = self._generate_set()
         
@@ -48,7 +74,7 @@ load_data(): Loads the training data.
         a = self.side_length
         w = self.width
         shift = self.shift
-        epsilon = self.epsilon
+        color_shift = self.color_shift
 
         data = np.ones([n,L,L])
         label = np.zeros([n,1])
@@ -77,9 +103,9 @@ load_data(): Loads the training data.
                 label[i] = 1
             
                 if shift == True:
-                    data[i,:,:] += epsilon     
+                    data[i,:,:] += color_shift     
             elif shift == True:
-                    data[i,:,:] -= epsilon
+                    data[i,:,:] -= color_shift
             
         data = np.expand_dims(data, axis =3)
         image_link = join("data",self.images)
