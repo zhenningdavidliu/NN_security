@@ -1,4 +1,4 @@
-from Data_loader import Data_loader
+from .Data_loader import Data_loader
 import numpy as np
 import random
 

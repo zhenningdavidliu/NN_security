@@ -1,4 +1,4 @@
-from Data_loader import Data_loader
+from .Data_loader import Data_loader
 import numpy as np
 import random
 from antialliasing import rotated_stripe, calc_dist
