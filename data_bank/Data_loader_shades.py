@@ -18,6 +18,16 @@ shade_contrast (int): the minimal distance between two colors of grey
 Methods
 -------
 load_data(): Loads the training data.
+
+
+Example arguments
+-----------------
+number_of_samples: 2000
+grid_size: 64
+side_length: 4
+shade_contrast: 0.1
+-----------------
+
 """
     def __init__(self, arguments):
         super(Data_loader_shades, self).__init__(arguments)

@@ -19,6 +19,16 @@ flip_a_values (bool): Whether to flip the sign of a, and hence the colour coding
 Methods
 -------
 load_data(): Loads the training data.
+
+
+Example arguments
+-----------------
+grid_size: 32
+line_width:  3
+a: 0.01
+flip_a_values: False
+-----------------
+
 """
 
     def __init__(self, arguments):
@@ -145,6 +155,17 @@ low_a_value (float): We pick x from the interval [low_a_value, a].
 Methods
 -------
 load_data(): Loads the training data.
+
+
+Example arguments
+-----------------
+grid_size: 32
+line_width:  3
+a: 0.01
+flip_a_values: False 
+data_size: 1000
+low_a_value: 0.009
+-----------------
 """
 
     def __init__(self, arguments):
