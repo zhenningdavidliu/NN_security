@@ -18,19 +18,19 @@ Returns
 Keras model
 """
     if model_name.lower() == "fc3":
-        return mb.build_model_fc3(input_shape, output_shape, arguments)
+        return build_model_fc3(input_shape, output_shape, arguments)
     elif model_name.lower() == "fc2":
-        return mb.build_model_fc2(input_shape, output_shape, arguments)
+        return build_model_fc2(input_shape, output_shape, arguments)
     elif model_name.lower() == "fc2_cheat":
-        return mb.build_model_fc2_cheat(input_shape, output_shape, arguments)
+        return build_model_fc2_cheat(input_shape, output_shape, arguments)
     elif model_name.lower() == "cnn2":
-        return mb.build_model_cnn2(input_shape, output_shape, arguments)
+        return build_model_cnn2(input_shape, output_shape, arguments)
     elif model_name.lower() == "cnn3":
-        return mb.build_model_cnn3(input_shape, output_shape, arguments)
+        return build_model_cnn3(input_shape, output_shape, arguments)
     elif model_name.lower() == "cnn4":
-        return mb.build_model_cnn4(input_shape, output_shape, arguments)
+        return build_model_cnn4(input_shape, output_shape, arguments)
     elif model_name.lower() == "cnndrop":
-        return mb.build_model_cnndrop(input_shape, output_shape, arguments)
+        return build_model_cnndrop(input_shape, output_shape, arguments)
     else:
         print('Error: Could not find model with name %s' % (model_name))
         return None;

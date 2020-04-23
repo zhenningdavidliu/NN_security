@@ -28,7 +28,7 @@ if __name__ == "__main__":
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
     
     # Load configuration file
-    configfile = 'config_lines.yml'
+    configfile = 'config.yml'
     with open(configfile) as ymlfile:
         cgf = yaml.load(ymlfile, Loader=yaml.SafeLoader);
 
@@ -83,7 +83,7 @@ arguments:""".format(model_name))
         print("\t{}: {}".format(key,value))
 
     # Load model
-    model = model_selector(model_name, input_shape, output_shape, model_arguments)
+    model = mb.model_selector(model_name, input_shape, output_shape, model_arguments)
 
     # Extract training information
     loss_type = cgf['TRAIN']['loss']['type']
