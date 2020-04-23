@@ -1,5 +1,0 @@
-['Picture number 0', array([0.])]
-['Picture number 20', array([0.])]
-['Picture number 33', array([0.])]
-['Picture number 57', array([0.])]
-['Picture number 86', array([0.])]
