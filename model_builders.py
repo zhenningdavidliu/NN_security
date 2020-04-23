@@ -4,6 +4,37 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Activation, Conv1D, Conv2D, Flatten, MaxPooling2D, Dropout
 from tensorflow.keras import regularizers
 
+def model_selector(model_name, input_shape, output_shape, arguments):
+    """ Select a model (network) based on `model_name` (str).
+Arguments
+---------
+model_name (str): Name of the model loader
+input_shape (list): List of integers specifying dimensions
+output_shape (list): List of integers specifying dimensions
+arguments (dict): Arguments to the model function
+
+Returns
+-------
+Keras model
+"""
+    if model_name.lower() == "fc3":
+        return mb.build_model_fc3(input_shape, output_shape, arguments)
+    elif model_name.lower() == "fc2":
+        return mb.build_model_fc2(input_shape, output_shape, arguments)
+    elif model_name.lower() == "fc2_cheat":
+        return mb.build_model_fc2_cheat(input_shape, output_shape, arguments)
+    elif model_name.lower() == "cnn2":
+        return mb.build_model_cnn2(input_shape, output_shape, arguments)
+    elif model_name.lower() == "cnn3":
+        return mb.build_model_cnn3(input_shape, output_shape, arguments)
+    elif model_name.lower() == "cnn4":
+        return mb.build_model_cnn4(input_shape, output_shape, arguments)
+    elif model_name.lower() == "cnndrop":
+        return mb.build_model_cnndrop(input_shape, output_shape, arguments)
+    else:
+        print('Error: Could not find model with name %s' % (model_name))
+        return None;
+
 def build_model_cnndrop(input_shape, output_shape, arguments):
     act = arguments['act'];
     final_act = arguments['final_act']
@@ -86,4 +117,38 @@ def build_model_cnn2(input_shape, output_shape, arguments):
 
     return model
 
+def build_model_cnn3(input_shape, output_shape, arguments):
+    act = arguments['act'];
+    final_act = arguments['final_act']
+     
+    model=Sequential()
+    model.add(Conv2D(filters=24, kernel_size=2, strides=(2,2), padding='same', activation=act, input_shape=input_shape))
+    model.add(MaxPooling2D(pool_size=(2,2), strides=None, padding='same', data_format=None))
+    model.add(Conv2D(filters=48, kernel_size=2, strides=(2,2), padding='same',activation=act))
+    model.add(MaxPooling2D(pool_size=(2,2), padding='same', strides=None))
+    model.add(Conv2D(filters=48, kernel_size=2, strides=(2,2), padding='same',activation=act))
+    model.add(MaxPooling2D(pool_size=(2,2), padding='same', strides=None))
+    model.add(Flatten())	
+    model.add(Dense(20))
+    model.add(Dense(output_shape, activation=final_act)) 
 
+    return model
+
+def build_model_cnn4(input_shape, output_shape, arguments):
+    act = arguments['act'];
+    final_act = arguments['final_act']
+     
+    model=Sequential()
+    model.add(Conv2D(filters=24, kernel_size=2, strides=(2,2), padding='same', activation=act, input_shape=input_shape))
+    model.add(MaxPooling2D(pool_size=(2,2), strides=None, padding='same', data_format=None))
+    model.add(Conv2D(filters=48, kernel_size=2, strides=(2,2), padding='same',activation=act))
+    model.add(MaxPooling2D(pool_size=(2,2), padding='same', strides=None))
+    model.add(Conv2D(filters=48, kernel_size=2, strides=(2,2), padding='same',activation=act))
+    model.add(MaxPooling2D(pool_size=(2,2), padding='same', strides=None))
+    model.add(Conv2D(filters=48, kernel_size=2, strides=(2,2), padding='same',activation=act))
+    model.add(MaxPooling2D(pool_size=(2,2), padding='same', strides=None))
+    model.add(Flatten())	
+    model.add(Dense(20))
+    model.add(Dense(output_shape, activation=final_act)) 
+
+    return model
