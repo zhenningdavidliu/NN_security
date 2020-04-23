@@ -62,9 +62,9 @@ label (ndarray): Label of the images. Size (N,1). Horizontal stripe images have
     label 1 and vertical stripe images have label 0. 
 """
 
-        data, label = self._generate_all_combinations_of_stripe_images();
+        data, label, diff = self._generate_all_combinations_of_stripe_images();
 
-        return data, label;
+        return data, label, diff;
     
     def _generate_all_combinations_of_stripe_images(self, shuffle=True):
 
@@ -86,6 +86,8 @@ label (ndarray): Label of the images. Size (N,1). Horizontal stripe images have
         data_ver = sign_ver*a*np.ones([nbr_of_perm, n, n]);
         label_hor = np.ones([nbr_of_perm, 1]);
         label_ver = np.zeros([nbr_of_perm, 1]);
+        diff_hor = sign_hor*a*np.ones([nbr_of_perm, 1]);
+        diff_ver = sign_ver*a*np.ones([nbr_of_perm, 1]);
 
         for i in range(nbr_of_perm):
             data_hor[i, i+lidx, :] += 1; 
@@ -93,12 +95,14 @@ label (ndarray): Label of the images. Size (N,1). Horizontal stripe images have
 
         data = np.concatenate((data_hor, data_ver), axis=0);
         label = np.concatenate((label_hor, label_ver), axis=0);
+        diff = np.concatenate((diff_hor, diff_ver), axis=0);
 
         if shuffle:
             idx = np.arange(2*nbr_of_perm);
             np.random.shuffle(idx);
             data = data[idx];
             label = label[idx];
+            diff = diff[idx];
 
         p = n*line_width;
         if flip_a_values:
@@ -120,7 +124,7 @@ label (ndarray): Label of the images. Size (N,1). Horizontal stripe images have
 
         data = np.expand_dims(data, axis = 3)
 
-        return data, label;
+        return data, label, diff;
         
     def __str__(self):
         class_str = """stripe data training
@@ -237,6 +241,7 @@ data_size: %d
 
         data = np.zeros([data_size, n, n]);
         label = np.zeros([data_size, 1]);
+        diff = np.zeros([data_size, 1]);
         for i in range(data_size):
 
             if is_horizontal[i]:
@@ -248,6 +253,7 @@ data_size: %d
                 sign = -sign;
 
             data[i, :, :] = sign*a_values[i]; 
+            diff[i] = sign*a;
 
             if is_horizontal[i]:
                 data[i, stripe_idx[i]+lidx, :] += 1; 
@@ -279,6 +285,6 @@ data_size: %d
         # make the data a 4 dimensional tensor for Neural Networks
         data = np.expand_dims(data, axis = 3)
 
-        return data, label;
+        return data, label, diff;
 
 
