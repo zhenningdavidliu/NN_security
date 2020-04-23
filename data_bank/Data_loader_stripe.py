@@ -209,9 +209,9 @@ label (ndarray): Label of the images. Size (N,1). Horizontal stripe images have
     label 1 and vertical stripe images have label 0. 
 """
 
-        data, label = self._generate_test_set();
+        data, label, diff = self._generate_test_set();
 
-        return data, label;
+        return data, label, diff;
 
     def __str__(self):
         class_str = """stripe data testing
@@ -253,7 +253,7 @@ data_size: %d
                 sign = -sign;
 
             data[i, :, :] = sign*a_values[i]; 
-            diff[i] = sign*a;
+            diff[i] = sign*a_values[i];
 
             if is_horizontal[i]:
                 data[i, stripe_idx[i]+lidx, :] += 1; 
