@@ -19,32 +19,8 @@ import matplotlib.pyplot as plt;
 import numpy as np;
 
 
-def model_selector(model_name, input_shape, output_shape, arguments):
-    """ Select a model (network) based on `model_name` (str).
-Arguments
----------
-model_name (str): Name of the model loader
-input_shape (list): List of integers specifying dimensions
-output_shape (list): List of integers specifying dimensions
-arguments (dict): Arguments to the model function
 
-Returns
--------
-Keras model
-"""
-    if model_name.lower() == "fc3":
-        return mb.build_model_fc3(input_shape, output_shape, arguments)
-    elif model_name.lower() == "fc2":
-        return mb.build_model_fc2(input_shape, output_shape, arguments)
-    elif model_name.lower() == "fc2_cheat":
-        return mb.build_model_fc2_cheat(input_shape, output_shape, arguments)
-    elif model_name.lower() == "cnn2":
-        return mb.build_model_cnn2(input_shape, output_shape, arguments)
-    elif model_name.lower() == "cnndrop":
-        return mb.build_model_cnndrop(input_shape, output_shape, arguments)
-    else:
-        print('Error: Could not find model with name %s' % (model_name))
-        return None;
+
 
 if __name__ == "__main__":
     """Train a full model based on the settings in `config.yml`"""
@@ -83,11 +59,11 @@ Use gpu: {}""".format(use_gpu))
     print(data_loader_validate)
 
     if configfile == 'config_lines.yml':
-        train_data, train_labels = data_loader_train.load_data();
-        val_data, val_labels = data_loader_validate.load_data();
+        train_data, train_labels,_ = data_loader_train.load_data();
+        val_data, val_labels,_ = data_loader_validate.load_data();
     elif configfile == 'config.yml':
-        train_data, train_labels, train_dif = data_loader_train.load_data();
-        val_data, val_labels, val_dif = data_loader_validate.load_data();
+        train_data, train_labels,_ = data_loader_train.load_data();
+        val_data, val_labels,_ = data_loader_validate.load_data();
 
     # Get input and output shape
     input_shape = train_data.shape[1:]
@@ -237,9 +213,9 @@ Model dest: {}""".format(model_number_type, model_number, dest_model))
     print(data_loader_test)
     
     if configfile == 'config_lines.yml':
-        test_data, test_labels = data_loader_test.load_data()
+        test_data, test_labels,_ = data_loader_test.load_data()
     elif configfile == 'config.yml':
-        test_data, test_labels, test_diff = data_loader_test.load_data()
+        test_data, test_labels,_ = data_loader_test.load_data()
     score = model.evaluate(test_data, test_labels, verbose=0)
     print('Accuracy on test set: {}%'.format(100*score[1]))
 
