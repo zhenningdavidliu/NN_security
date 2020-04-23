@@ -37,6 +37,10 @@ and it returns None.
         return Data_loader_stripe_train(arguments) 
     elif data_name.lower() == "stripe_test":
         return Data_loader_stripe_test(arguments) 
+    elif (data_name.lower() == "lines2"):
+        return Data_loader_lines2(arguments)   
+    elif (data_name.lower() == "shades2"):
+        return Data_loader_shades2(arguments)
     else:
         print('Error: Could not find data loader with name %s' % (data_name))
         return None;

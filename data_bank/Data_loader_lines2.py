@@ -46,7 +46,7 @@ labels: data_train_labels
 
 """
     def __init__(self, arguments):
-        super(Data_loader_lines3, self).__init__(arguments)
+        super(Data_loader_lines2, self).__init__(arguments)
         required_keys = ['number_of_samples', 'grid_size', 'side_length', 'width','save','images','labels']
 
         self._check_for_valid_arguments(required_keys, arguments)
