@@ -1,7 +1,7 @@
 from .Data_loader import Data_loader
 import numpy as np
 import random
-from antialliasing import rotated_stripe, calc_dist
+from .antialliasing import rotated_stripe, calc_dist
 import yaml
 import math
 from math import cos, sin

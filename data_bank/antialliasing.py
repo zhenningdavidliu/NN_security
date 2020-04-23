@@ -66,13 +66,13 @@ def rotated_stripe(x, y, l, w, angle, grid_size):
 
     return data
 
-if __name__ == "__main__" :
-    
-    img = rotated_stripe(40, 40, 50, 3, 27, 512)
-    print(img)
-    A_kron = np.ones([5,5])
-    img = 255*img
-    img = np.kron(img, A_kron)
-    img = img.astype(np.uint8)
-    img = Image.fromarray(img)
-    img.show()
+#if __name__ == "__main__" :
+#    
+#    img = rotated_stripe(40, 40, 50, 3, 27, 512)
+#    print(img)
+#    A_kron = np.ones([5,5])
+#    img = 255*img
+#    img = np.kron(img, A_kron)
+#    img = img.astype(np.uint8)
+#    img = Image.fromarray(img)
+#    img.show()
