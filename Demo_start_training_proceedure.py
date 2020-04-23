@@ -52,7 +52,7 @@ if __name__ == "__main__":
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
     
     # Load configuration file
-    configfile = 'config.yml'
+    configfile = 'config_lines.yml'
     with open(configfile) as ymlfile:
         cgf = yaml.load(ymlfile, Loader=yaml.SafeLoader);
 
@@ -82,12 +82,8 @@ Use gpu: {}""".format(use_gpu))
     print('DATASET VALIDATION')
     print(data_loader_validate)
 
-    if configfile == 'config_lines.yml':
-        train_data, train_labels = data_loader_train.load_data();
-        val_data, val_labels = data_loader_validate.load_data();
-    elif configfile == 'config.yml':
-        train_data, train_labels, train_dif = data_loader_train.load_data();
-        val_data, val_labels, val_dif = data_loader_validate.load_data();
+    train_data, train_labels, train_dif = data_loader_train.load_data();
+    val_data, val_labels, val_dif = data_loader_validate.load_data();
 
     # Get input and output shape
     input_shape = train_data.shape[1:]
@@ -236,10 +232,7 @@ Model dest: {}""".format(model_number_type, model_number, dest_model))
     print('\nDATASET TEST')
     print(data_loader_test)
     
-    if configfile == 'config_lines.yml':
-        test_data, test_labels = data_loader_test.load_data()
-    elif configfile == 'config.yml':
-        test_data, test_labels, test_diff = data_loader_test.load_data()
+    test_data, test_labels, test_diff = data_loader_test.load_data()
     score = model.evaluate(test_data, test_labels, verbose=0)
     print('Accuracy on test set: {}%'.format(100*score[1]))
 
