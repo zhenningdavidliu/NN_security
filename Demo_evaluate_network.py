@@ -12,6 +12,58 @@ from os.path import join
 #from PIL import Image
 
 
+def print_certainty_vs_distance_table(N, M, results, diff):
+    """
+    Prints a table which compares certainty and distance to decision boundary.
+
+    Arguments
+    ---------
+    N (int): Number of certainty intervals.
+    M (int): Number of distance intervals.
+    results (ndarry): Network predictions, as numbers between 0 and 1.
+    diff (ndarray): Distance to decision boundary, as a number between 0 and 1.
+
+    Returns
+    -------
+    table (ndarray): M×N table with the various samples and predictions.
+    """
+    
+    table = np.zeros([M,N]);
+
+    dN = 1.0/N
+    dM = 1.0/M
+
+    fline = 'Distance boundary '
+    len_dist_bd = len(fline);
+    print((len_dist_bd+int((N/2)*11 - 8 ))*" " + "Network certainty")
+
+    for i in range(N):
+        int_N = i*dN
+        int_N_up = (i+1)*dN
+        line_out = "[%3.0f, %3.0f]   " % (int_N*100, int_N_up*100);
+        fline += line_out
+    print(fline);
+    for j in range(M):
+        int_M = j*dM
+        int_M_up = (j+1)*dM
+        if j == M-1:
+            int_M_up = 1+1e-10;
+        line_out = "[%6.2f, %6.2f]: " % (int_M*100, int_M_up*100);
+        for i in range(N):
+            int_N = i*dN
+            int_N_up = (i+1)*dN
+            if i == N-1:
+                int_N_up = 1+1e-5;
+
+            acc = 0;
+            for k in range(data_size):
+                if (int_N <= results[k] < int_N_up) and int_M <= diff[k] < int_M_up:
+                    acc += 1;
+            table[j,i] = acc;
+            tmp = "     %-6d  " % (acc);
+            line_out += tmp;
+        print(line_out)
+    return table;
 
 if __name__ == "__main__":
 
@@ -92,18 +144,16 @@ stopping_criteria: {}""".format(loss_type, optimizer, batch_size, shuffle_data,
     accuracy = 0;
     for i in range(data_size):
         accuracy += ( results[i]>0.5 ) == bool(test_labels[i])
-
-
     print('Accuracy: ', accuracy/data_size)
 
+    N = 10; # Number of confidences
+    M = 10; # Number of distances
+    print_certainty_vs_distance_table(N, M, results, test_diff)    
 
-
-
-
-
-
-
-
+    print("\n\n")
+    N = 2; # Number of confidences
+    M = 2; # Number of distances
+    print_certainty_vs_distance_table(N, M, results, test_diff)    
 
 
 

@@ -123,6 +123,13 @@ label (ndarray): Label of the images. Size (N,1). Horizontal stripe images have
         # change dimensions to 4
 
         data = np.expand_dims(data, axis = 3)
+        
+        diff += a
+        diff /= 2*a
+        
+        if not flip_a_values:
+            diff *= -1
+            diff += 1;
 
         return data, label, diff;
         
@@ -284,6 +291,14 @@ data_size: %d
 
         # make the data a 4 dimensional tensor for Neural Networks
         data = np.expand_dims(data, axis = 3)
+
+        diff += a
+        diff /= 2*a
+
+        if not flip_a_values:
+            diff *= -1
+            diff += 1;
+
 
         return data, label, diff;
 

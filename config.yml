@@ -1,29 +1,35 @@
+
+
 DATASET_TRAIN:
-    name: shades_train
+    name: stripe_train
     arguments:
-        number_of_samples: 30000
-        grid_size: 64 
-        side_length: 4
-        shade_contrast: 0.1
+        grid_size: 32
+        line_width:  3
+        a: 0.01
+        flip_a_values: False
 
 DATASET_VAL:
-    name: shades_train
+    name: stripe_test
     arguments:
-        number_of_samples: 2000
-        grid_size: 64
-        side_length: 4
-        shade_contrast: 0.1
+        grid_size: 32
+        line_width:  3
+        a: 0.01
+        flip_a_values: False 
+        data_size: 1000
+        low_a_value: 0.009
 
 DATASET_TEST:
-    name: shades_test
+    name: stripe_test
     arguments:
-        number_of_samples: 1000
-        grid_size: 64
-        side_length: 4
-        shade_contrast: 0.1
+        grid_size: 32
+        line_width:  3
+        a: 0.01
+        flip_a_values: True 
+        data_size: 1000
+        low_a_value: 0.000
 
 MODEL:
-    name: cnndrop 
+    name: cnn3
     arguments:    
         act: relu
         final_act: sigmoid
@@ -35,7 +41,7 @@ MODEL_METADATA:
     dest_model: model
     model_number_type: fixed
     model_number_arguments:
-        model_id: 1
+        model_id: 2
         counter_path: ./
     save_best_model:
         use_model_checkpoint: yes
@@ -48,16 +54,16 @@ MODEL_METADATA:
             period: 1
 
 TRAIN:
-    batch_size: 60
+    batch_size: 500
     shuffle: no
     validate_every: 50
     optim:
         type: adam
         arguments:
             param1: none
-    max_epoch: 50 
+    max_epoch: 500 
     stopping_criteria:
-        type: EarlyStopping
+        type: epoch
         arguments:
             monitor: val_acc
             mode: auto

@@ -11,6 +11,6 @@ DATASET:
         a: 0.01
         flip_a_values: False
         data_size: 1000
-        low_a_value: 0.009
+        low_a_value: 0.000
 
 
