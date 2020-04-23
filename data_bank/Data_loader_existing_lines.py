@@ -1,7 +1,7 @@
 from .Data_loader import Data_loader
 import numpy as np
 import random
-from antialliasing import rotated_stripe, calc_dist
+from .antialliasing import rotated_stripe, calc_dist
 import os
 from os.path import join
 class Data_loader_existing_lines(Data_loader):

@@ -3,7 +3,7 @@ import os
 from os.path import join
 import matplotlib.pyplot as plt;
 import numpy as np;
-from Demo_start_training_proceedure import data_selector
+from data_bank import data_selector
 
 
 if __name__ == "__main__":

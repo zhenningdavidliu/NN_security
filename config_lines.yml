@@ -1,36 +1,33 @@
 DATASET_TRAIN:
-    name: lines_train
+    name: lines2
     arguments:
         number_of_samples: 10000
         grid_size: 128 
         side_length: 30
         width: 4
         shift: True
-        epsilon: 0.01
+        color_shift: 0.01
         save: True 
         images: "data_trainn_images"
         labels: "data_trainn_labels"
 DATASET_VAL:
-    name: lines_val
+    name: lines2
     arguments:
         number_of_samples: 2000
         grid_size: 128 
         side_length: 30 
         width: 4
         shift: True
-        epsilon: 0.01
+        color_shift: 0.01
         save: True 
         images: "data_valn_images"
         labels: "data_valn_labels"
 DATASET_TEST:
-    name: lines_test 
-    arguments:
-        number_of_samples: 1000
-        grid_size: 128 
+    name: lines2
         side_length: 30
         width: 4
         shift: True
-        epsilon: -0.01
+        color_shift: -0.01
         save: True 
         images: "data_testn_images"
         labels: "data_testn_labels"
