@@ -24,6 +24,9 @@ DATASET_VAL:
         labels: "data_valn_labels"
 DATASET_TEST:
     name: lines2
+    arguments:
+        number_of_samples: 100
+        grid_size: 128
         side_length: 30
         width: 4
         shift: True
