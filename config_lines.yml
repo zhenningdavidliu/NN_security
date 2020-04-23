@@ -1,7 +1,7 @@
 DATASET_TRAIN:
     name: lines2
     arguments:
-        number_of_samples: 10000
+        number_of_samples: 20000
         grid_size: 128 
         side_length: 30
         width: 4
