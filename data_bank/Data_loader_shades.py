@@ -43,7 +43,7 @@ shade_contrast: 0.1
         # Two squares different or same shades
         data, label, diff = self._generate_set()
 
-        return data, label
+        return data, label, diff
 
     def _generate_set(self, shuffle= True):
            
@@ -113,8 +113,7 @@ shade_contrast: 0.1
                 for j in range(i2,i2+l):
                     for k in range(j2,j2+l):
                         data[i,j,k]=shade2
-                if abs(shade2-shade1)>=0.15:
-                    diff[i] = 1
+                diff[i] = (shade1 - shade2 + 0.8)/1.6 # the 0.8 and 1.6 are for normalization 
 
         data = np.expand_dims(data, axis = 3)
 

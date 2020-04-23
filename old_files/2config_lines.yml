@@ -1,0 +1,98 @@
+DATASET_TRAIN:
+    name: lines_train
+    arguments:
+        number_of_samples: 1000
+        grid_size: 128 
+        side_length: 30
+        width: 4
+        shift: True
+        epsilon: 0.03
+        save: True 
+        images: "data_trainn_images"
+        labels: "data_trainn_labels"
+DATASET_VAL:
+    name: lines_val
+    arguments:
+        number_of_samples: 200
+        grid_size: 128 
+        side_length: 30 
+        width: 4
+        shift: True
+        epsilon: 0.03
+        save: True 
+        images: "data_valn_images"
+        labels: "data_valn_labels"
+DATASET_TEST:
+    name: lines_test 
+    arguments:
+        number_of_samples: 100
+        grid_size: 128 
+        side_length: 30
+        width: 4
+        shift: True
+        epsilon: -0.03
+        save: True 
+        images: "data_testn_images"
+        labels: "data_testn_labels"
+MODEL:
+    name: cnndrop 
+    arguments:    
+        act: relu
+        final_act: sigmoid
+        bias_initializer: zeros
+
+MODEL_METADATA:
+    precision: float64
+    save_final_model: yes
+    dest_model: model
+    model_number_type: fixed
+    model_number_arguments:
+        model_id: 30
+        counter_path: ./
+    save_best_model:
+        use_model_checkpoint: yes
+        arguments:
+            filepath: best_model_demo.h5
+            monitor: val_acc
+            verbose: 1
+            save_best_only: False
+            mode: max
+            period: 1
+
+TRAIN:
+    batch_size: 50
+    shuffle: no
+    validate_every: 50
+    optim:
+        type: adam
+        arguments:
+            param1: none
+    max_epoch: 20
+    stopping_criteria:
+        type: EarlyStopping
+        arguments:
+            monitor: val_acc
+            mode: auto
+            verbose: 1
+            patience: 5
+
+    loss:
+        type: binary_crossentropy
+        arguments:
+            param1: none
+    metrics:
+        metric1: accuracy
+
+COMPUTER_SETUP:
+    use_gpu: yes
+    compute_node: 0
+
+INFORMATION_TRAIN:
+    save_every: 10
+    print_every: 10
+    plot:
+        font_size: 15
+        loss_train: no
+        accuracy_train: no
+
+

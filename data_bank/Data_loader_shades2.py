@@ -43,7 +43,7 @@ shade_contrast: 0.1
         # task is to say which side is lighter
         data, label, diff = self._generate_set()
 
-        return data, label
+        return data, label, diff
        
     def _generate_set(self, shuffle= True):
            
@@ -57,22 +57,22 @@ shade_contrast: 0.1
         diff = np.zeros(n)
         for i in range(n):
 
-            i1 = np.random.randint(a-l) 
-            j1 = np.random.randint(a-l) 
+            i1 = np.random.randint(a-l-1) 
+            j1 = np.random.randint(a-l-1) 
         
-            i2 = np.random.randint(a-2*l) 
-            j2 = np.random.randint(a-2*l) 
+            i2 = np.random.randint(a-2*l-1) 
+            j2 = np.random.randint(a-2*l-1) 
 
             shade1 = np.random.normal(0.4,0.2432)
             shade2 = np.random.normal(0.4,0.2432)
            
             while (((i2-i1)<l) and ((j2-j1)<l)) or (((i1-i2)<2*l) and ((j1-j2)<2*l)) :
 
-                i1 = np.random.randint(a-l) 
-                j1 = np.random.randint(a-l) 
+                i1 = np.random.randint(a-l-1) 
+                j1 = np.random.randint(a-l-1) 
             
-                i2 = np.random.randint(a-2*l) 
-                j2 = np.random.randint(a-2*l) 
+                i2 = np.random.randint(a-2*l-1) 
+                j2 = np.random.randint(a-2*l-1) 
 
 
 
@@ -99,7 +99,7 @@ shade_contrast: 0.1
             for j in range(i2,i2+2*l):
                 for k in range(j2,j2+2*l):
                     data[i,j,k]=shade2
-            diff[i] = shade1 - shade2
+            diff[i] = (shade1 - shade2 + 0.8)/1.6 # the 0.8 and 1.6 are for normalization 
             
             if shade1>shade2:
                 label[i] = 1 # Left is brighter

@@ -1,7 +1,4 @@
 """
-This is a modification to Demo_start_training_proceedure.py where it repeats 
-the code until it finds a model with a false structure
-
 This file read a `config.yml` file and train a network based on the settings
 in that file
 """
@@ -13,8 +10,11 @@ from tensorflow.keras import backend as K
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from nn_tools import read_count
 import tensorflow as tf
-from data_bank import data_selector
 from Data_loader_shades import Data_loader_shades
+from Data_loader_lines import Data_loader_lines
+from Data_loader_existing_lines import Data_loader_existing_lines
+from Data_loader_grad_lines import Data_loader_grad_lines
+from Data_loader_grad_shades import Data_loader_grad_shades
 import model_builders as mb
 from SaveWeights import MyCallback
 import os
@@ -22,7 +22,31 @@ from os.path import join
 import matplotlib.pyplot as plt;
 import numpy as np;
 
+def data_selector(data_name, arguments):
+    """ Select a data loader based on `data_name` (str).
+Arguments
+---------
+data_name (str): Name of the data loader
+arguments (dict): Dictionary given to the constructor of the data loader
 
+Returns
+-------
+Data loader with name `data_name`. If not found, an error message is printed
+and it returns None.
+"""
+    if (data_name.lower() == "shades_train") or (data_name.lower() == "shades_val") or (data_name.lower() == "shades_test"):
+        return Data_loader_shades(arguments)
+    elif (data_name.lower() == "lines_train") or (data_name.lower() == "lines_val") or (data_name.lower() == "lines_test"):
+        return Data_loader_lines(arguments)   
+    elif (data_name.lower() == "load_lines_train") or (data_name.lower() == "load_lines_val") or (data_name.lower() == "load_lines_test"):
+        return Data_loader_existing_lines(arguments) 
+    elif (data_name.lower() == "glines_train") or (data_name.lower() == "glines_val") or (data_name.lower() == "glines_test"):
+        return Data_loader_grad_lines(arguments) 
+    elif (data_name.lower() == "gshades_train") or (data_name.lower() == "gshades_val") or (data_name.lower() == "gshades_test"):
+        return Data_loader_grad_shades(arguments) 
+    else:
+        print('Error: Could not find data loader with name %s' % (data_name))
+        return None;
 
 def model_selector(model_name, input_shape, output_shape, arguments):
     """ Select a model (network) based on `model_name` (str).
@@ -57,7 +81,8 @@ if __name__ == "__main__":
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
     
     # Load configuration file
-    with open('config_lines.yml') as ymlfile:
+    configfile = '2config_lines.yml'
+    with open(configfile) as ymlfile:
         cgf = yaml.load(ymlfile, Loader=yaml.SafeLoader);
 
     # Set up computational resource 
@@ -86,8 +111,12 @@ Use gpu: {}""".format(use_gpu))
     print('DATASET VALIDATION')
     print(data_loader_validate)
 
-    train_data, train_labels, train_diff = data_loader_train.load_data();
-    val_data, val_labels, val_diff = data_loader_validate.load_data();
+    if configfile == '2config_lines.yml':
+        train_data, train_labels = data_loader_train.load_data3();
+        val_data, val_labels = data_loader_validate.load_data3();
+    elif configfile == 'config.yml':
+        train_data, train_labels, train_dif = data_loader_train.load_data3();
+        val_data, val_labels, val_dif = data_loader_validate.load_data3();
 
     # Get input and output shape
     input_shape = train_data.shape[1:]
@@ -211,26 +240,12 @@ Model dest: {}""".format(model_number_type, model_number, dest_model))
     # Train model :)
     print(shuffle_data)
     print(callbacks)
-    
-
-    data_loader_test = data_selector(cgf['DATASET_TEST']['name'], cgf['DATASET_TEST']['arguments'])
-    test_data, test_labels, test_diff = data_loader_test.load_data2()
-    optimal = 0
-
-    while optimal < 0.9  :
-        model = model_selector(model_name, input_shape, output_shape, model_arguments)
-        model.compile(optimizer = optimizer,
-                      loss = loss_type,
-                      metrics = metric_list)
-        history = model.fit(train_data, train_labels, 
-                  epochs=max_epoch, 
-                  batch_size=batch_size,
-                  validation_data=(val_data, val_labels),
-                  shuffle=shuffle_data,
-                  callbacks = callbacks)
-
-        score = model.evaluate(test_data, test_labels, verbose=0)
-        optimal = score[1]
+    history = model.fit(train_data, train_labels, 
+              epochs=max_epoch, 
+              batch_size=batch_size,
+              validation_data=(val_data, val_labels),
+              shuffle=shuffle_data,
+              callbacks = callbacks)
 
     if save_final_model:
         full_file_name = join(full_dest_model, 'keras_model_files.h5')
@@ -244,10 +259,14 @@ Model dest: {}""".format(model_number_type, model_number, dest_model))
     plt.plot(index,loss_hist);
     plt.savefig(join(full_dest_model, 'loss_graph.png'));
     # Load and test model on test set
-    
+    data_loader_test = data_selector(cgf['DATASET_TEST']['name'], cgf['DATASET_TEST']['arguments'])
     print('\nDATASET TEST')
     print(data_loader_test)
-
+    
+    if configfile == '2config_lines.yml':
+        test_data, test_labels = data_loader_test.load_data3()
+    elif configfile == 'config.yml':
+        test_data, test_labels, test_diff = data_loader_test.load_data3()
     score = model.evaluate(test_data, test_labels, verbose=0)
     print('Accuracy on test set: {}%'.format(100*score[1]))
 

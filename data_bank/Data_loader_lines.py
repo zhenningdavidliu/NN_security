@@ -27,6 +27,7 @@ width (int): Width of the stripe.
 save (bool): Whether the generated images are saved to a text file for future usage.(Since it may take a while)
 images (string): The name of the file into which the generated images are saved (if save == True).
 labels (string): The name of the file into which the generated labels are saved (if save == True).
+difference (string): The name of the file into which the generated differences are saved.
 shift (bool): Whether we want a color perturbation.
 color_shift (float): The value by which the images are changed by.
 
@@ -45,6 +46,7 @@ color_shift: 0.01
 save: True
 images: data_train_images
 labels: data_train_labels
+difference: data_train_difference
 -----------------
 
 """
@@ -60,12 +62,13 @@ labels: data_train_labels
         self.save = arguments['save']
         self.images = arguments['images']
         self.labels = arguments['labels']
+        self.difference = arguments['difference']
         self.shift = arguments['shift']
         self.color_shift = arguments['color_shift']
     def load_data(self):
-        data, label = self._generate_set()
+        data, label, diff = self._generate_set()
         
-        return data, label 
+        return data, label, diff 
 
     def _generate_set(self, shuffle= True):
         
@@ -78,6 +81,7 @@ labels: data_train_labels
 
         data = np.ones([n,L,L])
         label = np.zeros([n,1])
+        diff = np.zeros([n,1])
         angle = np.zeros(n)
 
         for i in range(n):
@@ -107,14 +111,20 @@ labels: data_train_labels
             elif shift == True:
                     data[i,:,:] -= color_shift
             
+            diff[i] = 1 - diff[i]/90
+            
+
         data = np.expand_dims(data, axis =3)
         image_link = join("data",self.images)
-        label_link = join("data",self.images)
+        label_link = join("data",self.labels)
+        diff_link = join("data",self.difference)
+
         if self.save == True :
             np.save(image_link,data)
             np.save(label_link,label)
+            np.save(diff_link, diff)
 
-        return data, label
+        return data, label, diff
     '''
     def _generate_set2(self):
 
