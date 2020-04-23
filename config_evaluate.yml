@@ -1,0 +1,16 @@
+MODEL:
+    model_id: 2
+    model_dest: model
+
+DATASET:
+    use_default: no
+    name: stripe_test
+    arguments:
+        grid_size: 32
+        line_width:  3
+        a: 0.01
+        flip_a_values: False
+        data_size: 1000
+        low_a_value: 0.009
+
+
