@@ -1,39 +1,45 @@
 DATASET_TRAIN:
-    name: lines2
+    name: load_lines
     arguments:
-        number_of_samples: 20000
+        number_of_samples: 10000
         grid_size: 128 
-        side_length: 30
+        side_length: 50
         width: 4
-        shift: True
+        shift: False
         color_shift: 0.01
         save: True 
-        images: "data_trainn_images"
-        labels: "data_trainn_labels"
+        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_train_images.npy"
+        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_train_labels.npy"
+        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_train_difference.npy"
+
 DATASET_VAL:
-    name: lines2
+    name: load_lines
     arguments:
         number_of_samples: 2000
         grid_size: 128 
-        side_length: 30 
+        side_length: 50 
         width: 4
-        shift: True
+        shift: False 
         color_shift: 0.01
         save: True 
-        images: "data_valn_images"
-        labels: "data_valn_labels"
+        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_val_images.npy"
+        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_val_labels.npy"
+        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_val_difference.npy"
+
 DATASET_TEST:
-    name: lines2
+    name: load_lines
     arguments:
-        number_of_samples: 100
+        number_of_samples: 1000
         grid_size: 128
-        side_length: 30
+        side_length: 50
         width: 4
-        shift: True
+        shift: False 
         color_shift: -0.01
         save: True 
-        images: "data_testn_images"
-        labels: "data_testn_labels"
+        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_test_images.npy"
+        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_test_labels.npy"
+        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_test_difference.npy"
+
 MODEL:
     name: cnndrop 
     arguments:    

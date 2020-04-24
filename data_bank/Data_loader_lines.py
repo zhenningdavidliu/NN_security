@@ -131,9 +131,9 @@ Difference: %s
             
 
         data = np.expand_dims(data, axis =3)
-        image_link = join("data",self.images)
-        label_link = join("data",self.labels)
-        diff_link = join("data",self.difference)
+        image_link = self.images
+        label_link = self.labels
+        diff_link = self.difference
 
         if self.save == True :
             np.save(image_link,data)

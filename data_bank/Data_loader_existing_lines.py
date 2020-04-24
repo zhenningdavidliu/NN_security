@@ -45,12 +45,9 @@ arguments:
 
     def load_data(self):
 
-        images = self.images + ".npy"
-        labels = self.labels + ".npy"
-        difference = self.difference + ".npy"
-        images = join("data",images)
-        labels = join("data",labels)
-        difference = join("data",difference)
+        images = self.images
+        labels = self.labels
+        difference = self.difference
         data = np.load(images)
         label = np.load(labels)
         difference = np.load(difference)
