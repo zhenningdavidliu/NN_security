@@ -71,7 +71,7 @@ difference: data_train_difference
         return data, label, diff 
 
     def __str__(self):
-        class_str = """stripe data testing
+        class_str = """lines data testing
 Number of samples: %d 
 Grid size: %d 
 Side length: %d 
