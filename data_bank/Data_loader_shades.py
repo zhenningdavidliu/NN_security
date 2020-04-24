@@ -46,7 +46,7 @@ shade_contrast: 0.1
         return data, label, diff
 
     def __str__(self):
-        class_str = """stripe data testing
+        class_str = """Shades data
 Number of samples: %d
 Grid size: %d
 Side length: %d
