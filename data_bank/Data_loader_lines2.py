@@ -67,6 +67,22 @@ difference: data_train_difference
         
         return data, label, diff 
 
+    def __str__(self):
+        class_str = """stripe data testing
+Number of samples: %d 
+Grid size: %d 
+Side length: %d 
+Width: %d 
+Shift: %s 
+Color shift: %g
+Save: %s 
+Images: %s 
+Labels: %s 
+Difference: %s 
+""" % (self.number_of_samples, self.grid_size, self.side_length, self.width, self.shift, self.color_shift, self.save, self.images, self.labels, self.difference)
+        return class_str
+
+
     def _generate_set(self):
         
         n = self.number_of_samples

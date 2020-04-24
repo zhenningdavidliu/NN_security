@@ -45,6 +45,16 @@ shade_contrast: 0.1
 
         return data, label, diff
        
+    def __str__(self):
+        class_str = """stripe data testing
+Number of samples: %d
+Grid size: %d
+Side length: %d
+Shade contrast: %d
+""" % (self.number_of_samples, self.grid_size, self.side_length, self.shade_contrast)
+        return class_str
+
+
     def _generate_set(self, shuffle= True):
            
         n = self.number_of_samples
