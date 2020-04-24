@@ -50,7 +50,7 @@ shade_contrast: 0.1
 Number of samples: %d
 Grid size: %d
 Side length: %d
-Shade contrast: %d
+Shade contrast: %g
 """ % (self.number_of_samples, self.grid_size, self.side_length, self.shade_contrast)
         return class_str
 
