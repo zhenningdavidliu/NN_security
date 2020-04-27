@@ -28,7 +28,7 @@ if __name__ == "__main__":
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
     
     # Load configuration file
-    configfile = 'config.yml'
+    configfile = 'config_lines.yml'
     with open(configfile) as ymlfile:
         cgf = yaml.load(ymlfile, Loader=yaml.SafeLoader);
 
@@ -150,7 +150,7 @@ Save final model: {}""".format(model_precision, save_final_model))
             print('Delete all content in the folder: \n{}'.format(full_dest_model))
             shutil.rmtree(full_dest_model);
             os.mkdir(full_dest_model)
-        shutil.copyfile('config.yml', join(full_dest_model, 'config.yml'))
+        shutil.copyfile(configfile, join(full_dest_model, 'config.yml'))
         shutil.copyfile('model_builders.py', join(full_dest_model, 'model_builders.py'))
         print("""Model nbr type: {}
 Model number: {}
