@@ -127,7 +127,7 @@ Difference: %s
             elif shift == True:
                     data[i,:,:] -= color_shift
             
-            diff[i] = 1 - diff[i]/90
+            diff[i] = 1 - angle[i]/90
             
 
         data = np.expand_dims(data, axis =3)
