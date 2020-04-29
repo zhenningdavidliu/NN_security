@@ -1,16 +1,23 @@
 MODEL:
-    model_id: 2
+    model_id: 9
     model_dest: model
 
 DATASET:
     use_default: no
-    name: stripe_test
+    name: 'shades3'
     arguments:
-        grid_size: 32
-        line_width:  3
-        a: 0.01
-        flip_a_values: False
-        data_size: 1000
-        low_a_value: 0.000
+        number_of_samples: 5000
+        grid_size: 256
+        side_length: 8
+        shade_contrast: 0.1
+        corners: [3]
+    #name: stripe_test
+    #arguments:
+    #    grid_size: 32
+    #    line_width:  3
+    #    a: 0.01
+    #    flip_a_values: False 
+    #    data_size: 10000
+    #    low_a_value: 0.000
 
 

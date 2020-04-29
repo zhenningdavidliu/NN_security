@@ -1,35 +1,56 @@
 
 
 DATASET_TRAIN:
-    name: stripe_train
+    name: 'shades3'
     arguments:
-        grid_size: 32
-        line_width:  3
-        a: 0.01
-        flip_a_values: False
+        number_of_samples: 1000
+        grid_size: 256
+        side_length: 8
+        shade_contrast: 0.1
+        corners: [1, 2, 4]
+    #name: stripe_train
+    #arguments:
+    #    grid_size: 32
+    #    line_width:  3
+    #    a: 0.01
+    #    flip_a_values: False
 
 DATASET_VAL:
-    name: stripe_test
+    name: 'shades3'
     arguments:
-        grid_size: 32
-        line_width:  3
-        a: 0.01
-        flip_a_values: False 
-        data_size: 1000
-        low_a_value: 0.009
+        number_of_samples: 2000
+        grid_size: 256
+        side_length: 8
+        shade_contrast: 0.1
+        corners: [1, 2, 4]
+    #name: stripe_test
+    #arguments:
+    #    grid_size: 32
+    #    line_width:  3
+    #    a: 0.01
+    #    flip_a_values: False 
+    #    data_size: 1000
+    #    low_a_value: 0.000
 
 DATASET_TEST:
-    name: stripe_test
+    name: 'shades3'
     arguments:
-        grid_size: 32
-        line_width:  3
-        a: 0.01
-        flip_a_values: True 
-        data_size: 1000
-        low_a_value: 0.000
+        number_of_samples: 5000
+        grid_size: 256
+        side_length: 8
+        shade_contrast: 0.1
+        corners: [1, 2, 3, 4]
+#    name: stripe_test
+#    arguments:
+#        grid_size: 32
+#        line_width:  3
+#        a: 0.01
+#        flip_a_values: True 
+#        data_size: 1000
+#        low_a_value: 0.000
 
 MODEL:
-    name: cnn3
+    name: cnn4
     arguments:    
         act: relu
         final_act: sigmoid
@@ -41,7 +62,7 @@ MODEL_METADATA:
     dest_model: model
     model_number_type: fixed
     model_number_arguments:
-        model_id: 2
+        model_id: 9
         counter_path: ./
     save_best_model:
         use_model_checkpoint: yes
@@ -56,12 +77,12 @@ MODEL_METADATA:
 TRAIN:
     batch_size: 500
     shuffle: no
-    validate_every: 50
+    validate_every: 1000
     optim:
         type: adam
         arguments:
             param1: none
-    max_epoch: 500 
+    max_epoch: 250 
     stopping_criteria:
         type: epoch
         arguments:

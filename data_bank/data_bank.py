@@ -6,6 +6,7 @@ from .Data_loader_grad_shades import Data_loader_grad_shades
 from .Data_loader_stripe import Data_loader_stripe_test, Data_loader_stripe_train
 from .Data_loader_lines2 import Data_loader_lines2
 from .Data_loader_shades2 import Data_loader_shades2
+from .Data_loader_shades3 import Data_loader_shades3
 
 def data_selector(data_name, arguments):
     """ Select a data loader based on `data_name` (str).
@@ -23,6 +24,8 @@ and it returns None.
         return Data_loader_shades(arguments)
     if data_name.lower() == "shades2":
         return Data_loader_shades2(arguments)
+    if data_name.lower() == "shades3":
+        return Data_loader_shades3(arguments)
     elif data_name.lower() == "lines":
         return Data_loader_lines(arguments)   
     elif data_name.lower() == "lines2":
