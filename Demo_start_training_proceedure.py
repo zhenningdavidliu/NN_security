@@ -17,8 +17,8 @@ import os
 from os.path import join
 import matplotlib.pyplot as plt;
 import numpy as np;
-
-
+import sys
+from tensorflow.keras.applications.resnet50 import preprocess_input
 
 
 
@@ -28,7 +28,7 @@ if __name__ == "__main__":
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
     
     # Load configuration file
-    configfile = 'config.yml'
+    configfile = 'config_lines.yml'
     with open(configfile) as ymlfile:
         cgf = yaml.load(ymlfile, Loader=yaml.SafeLoader);
 
@@ -57,13 +57,23 @@ Use gpu: {}""".format(use_gpu))
     print(data_loader_train)
     print('DATASET VALIDATION')
     print(data_loader_validate)
-
+    
     if configfile == 'config_lines.yml':
         train_data, train_labels,_ = data_loader_train.load_data();
         val_data, val_labels,_ = data_loader_validate.load_data();
     elif configfile == 'config.yml':
         train_data, train_labels,_ = data_loader_train.load_data();
         val_data, val_labels,_ = data_loader_validate.load_data();
+
+    if (cgf['MODEL']['name'] == "resnet") or (cgf['MODEL']['name'] == "vgg16"):
+        train_data = np.repeat(train_data,3,-1)
+        val_data = np.repeat(val_data,3,-1)
+        train_data = tf.cast(train_data, dtype=tf.float16)
+        val_data = tf.cast(val_data, dtype=tf.float16)
+        train_labels = tf.cast(train_labels, dtype=tf.float16)
+        val_labels = tf.cast(val_labels, dtype=tf.float16)
+        train_data= preprocess_input(train_data)
+        val_data= preprocess_input(val_data)
 
     # Get input and output shape
     input_shape = train_data.shape[1:]
@@ -216,6 +226,12 @@ Model dest: {}""".format(model_number_type, model_number, dest_model))
         test_data, test_labels,_ = data_loader_test.load_data()
     elif configfile == 'config.yml':
         test_data, test_labels,_ = data_loader_test.load_data()
+
+    if (cgf['MODEL']['name'] == "resnet") or (cgf['MODEL']['name'] == "vgg16"):
+        test_data = np.repeat(test_data,3,-1)
+        test_data = tf.cast(test_data, dtype=tf.float16)   
+        test_labels = tf.cast(test_labels, dtype=tf.float16)
+        test_data= preprocess_input(test_data) 
     score = model.evaluate(test_data, test_labels, verbose=0)
     print('Accuracy on test set: {}%'.format(100*score[1]))
 

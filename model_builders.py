@@ -3,6 +3,8 @@ import numpy as np
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Activation, Conv1D, Conv2D, Flatten, MaxPooling2D, Dropout
 from tensorflow.keras import regularizers
+from tensorflow.keras.applications.resnet50 import ResNet50
+from tensorflow.keras.applications.vgg16 import VGG16
 
 def model_selector(model_name, input_shape, output_shape, arguments):
     """ Select a model (network) based on `model_name` (str).
@@ -31,9 +33,40 @@ Keras model
         return build_model_cnn4(input_shape, output_shape, arguments)
     elif model_name.lower() == "cnndrop":
         return build_model_cnndrop(input_shape, output_shape, arguments)
+    elif model_name.lower() == "resnet":
+        return build_model_resnet(input_shape, output_shape, arguments)
+    elif model_name.lower() == "vgg16":
+        return build_model_vgg16(input_shape, output_shape, arguments)
     else:
         print('Error: Could not find model with name %s' % (model_name))
         return None;
+
+def build_model_resnet(input_shape, output_shape, arguments):
+    
+    final_act = arguments['final_act']
+
+    model = Sequential()
+
+    model.add(ResNet50(include_top=False))
+
+    model.add(Flatten())
+    model.add(Dense(output_shape,activation=final_act))
+
+    return model
+
+def build_model_vgg16(input_shape, output_shape, arguments):
+
+    final_act = arguments['final_act']
+
+    model = Sequential()
+
+    model.add(ResNet50(include_top=False, input_shape = (224,224,3)))
+
+    model.add(Flatten())
+    model.add(Dense(output_shape,activation=final_act))
+
+    return model
+
 
 def build_model_cnndrop(input_shape, output_shape, arguments):
     act = arguments['act'];
