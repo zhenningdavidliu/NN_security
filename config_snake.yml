@@ -4,7 +4,7 @@ DATASET_TRAIN:
         number_of_samples: 1000
         grid_size: 224 
         shift: False 
-        color_shift: 0.01
+        epsilon: 0.01
         save: False 
         images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/snake_data_train_images.npy"
         labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/snake_data_train_labels.npy"
@@ -16,7 +16,7 @@ DATASET_VAL:
         number_of_samples: 200
         grid_size: 224 
         shift: False 
-        color_shift: 0.01
+        epsilon: 0.01
         save: False 
         images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/snake_data_val_images.npy"
         labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/snake_data_val_labels.npy"
@@ -28,7 +28,7 @@ DATASET_TEST:
         number_of_samples: 200
         grid_size: 224
         shift: False 
-        color_shift: -0.01
+        epsilon: -0.01
         save: False 
         images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/snake_data_test_images.npy"
         labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/snakedata_test_labels.npy"
