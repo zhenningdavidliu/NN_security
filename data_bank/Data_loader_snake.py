@@ -40,7 +40,7 @@ labels: data_train_labels
 """
     def __init__(self, arguments):
         super(Data_loader_snake, self).__init__(arguments)
-        required_keys = ['number_of_samples', 'grid_size', 'save','images','labels']
+        required_keys = ['number_of_samples', 'grid_size', 'save','images','labels','difference']
 
         self._check_for_valid_arguments(required_keys, arguments)
         self.number_of_samples = arguments['number_of_samples']
@@ -48,6 +48,7 @@ labels: data_train_labels
         self.save = arguments['save']
         self.images = arguments['images']
         self.labels = arguments['labels']
+        self.difference = arguments['difference']
         self.shift = arguments['shift']
         self.color_shift = arguments['color_shift']
     def load_data(self):
@@ -76,7 +77,7 @@ Labels: %s
         color_shift = self.color_shift
 
         data = np.ones([n,L,L])
-        label = np.random.binomial(1,0.5,n)
+        label = np.random.binomial(1,0.5,[n,1])
         diff = label
         for i in range(n):
             x = 0
