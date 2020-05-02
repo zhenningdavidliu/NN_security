@@ -1,13 +1,22 @@
 
-data_name: stripe_test
+data_name: snake 
 data_arguments:
-    grid_size: 32
-    line_width:  3
-    a: 0.01
-    flip_a_values: False 
-    data_size: 1000
-    low_a_value: 0.009
-
+    number_of_samples: 300
+    grid_size: 224
+    shift: False 
+    epsilon: 1
+    save: False 
+    images: "data_trainn_images"
+    labels: "data_trainn_labels"
+    difference: "data_trainn_diff"
+#data_arguments:
+#    grid_size: 32
+#    line_width:  3
+#    a: 0.01
+#    flip_a_values: False 
+#    data_size: 1000
+#    low_a_value: 0.009
+#
 #data_name: stripe_train
 #data_arguments:
 #    grid_size: 32
