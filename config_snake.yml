@@ -1,0 +1,98 @@
+DATASET_TRAIN:
+    name: snake 
+    arguments:
+        number_of_samples: 1000
+        grid_size: 224 
+        shift: False 
+        color_shift: 0.01
+        save: False 
+        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/snake_data_train_images.npy"
+        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/snake_data_train_labels.npy"
+        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/snake_data_train_difference.npy"
+
+DATASET_VAL:
+    name: snake 
+    arguments:
+        number_of_samples: 200
+        grid_size: 224 
+        shift: False 
+        color_shift: 0.01
+        save: False 
+        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/snake_data_val_images.npy"
+        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/snake_data_val_labels.npy"
+        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/snake_data_val_difference.npy"
+
+DATASET_TEST:
+    name: snake 
+    arguments:
+        number_of_samples: 200
+        grid_size: 224
+        shift: False 
+        color_shift: -0.01
+        save: False 
+        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/snake_data_test_images.npy"
+        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/snakedata_test_labels.npy"
+        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/snake_data_test_difference.npy"
+
+MODEL:
+    name: cnndrop 
+    arguments:    
+        act: relu
+        final_act: sigmoid
+        bias_initializer: zeros
+
+MODEL_METADATA:
+    precision: float64
+    save_final_model: yes
+    dest_model: model
+    model_number_type: fixed
+    model_number_arguments:
+        model_id: 23
+        counter_path: ./
+    save_best_model:
+        use_model_checkpoint: yes
+        arguments:
+            filepath: best_model_demo.h5
+            monitor: val_acc
+            verbose: 1
+            save_best_only: False
+            mode: max
+            period: 1
+
+TRAIN:
+    batch_size: 50
+    shuffle: no
+    validate_every: 50
+    optim:
+        type: adam
+        arguments:
+            param1: none
+    max_epoch: 10
+    stopping_criteria:
+        type: EarlyStopping
+        arguments:
+            monitor: val_acc
+            mode: auto
+            verbose: 1
+            patience: 5
+
+    loss:
+        type: binary_crossentropy
+        arguments:
+            param1: none
+    metrics:
+        metric1: accuracy
+
+COMPUTER_SETUP:
+    use_gpu: yes
+    compute_node: 0
+
+INFORMATION_TRAIN:
+    save_every: 10
+    print_every: 10
+    plot:
+        font_size: 15
+        loss_train: no
+        accuracy_train: no
+
+

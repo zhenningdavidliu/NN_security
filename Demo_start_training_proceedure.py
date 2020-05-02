@@ -58,12 +58,8 @@ Use gpu: {}""".format(use_gpu))
     print('DATASET VALIDATION')
     print(data_loader_validate)
     
-    if configfile == 'config_lines.yml':
-        train_data, train_labels,_ = data_loader_train.load_data();
-        val_data, val_labels,_ = data_loader_validate.load_data();
-    elif configfile == 'config.yml':
-        train_data, train_labels,_ = data_loader_train.load_data();
-        val_data, val_labels,_ = data_loader_validate.load_data();
+    train_data, train_labels,_ = data_loader_train.load_data();
+    val_data, val_labels,_ = data_loader_validate.load_data();
 
     if (cgf['MODEL']['name'] == "resnet") or (cgf['MODEL']['name'] == "vgg16"):
         train_data = np.repeat(train_data,3,-1)
@@ -222,10 +218,7 @@ Model dest: {}""".format(model_number_type, model_number, dest_model))
     print('\nDATASET TEST')
     print(data_loader_test)
     
-    if configfile == 'config_lines.yml':
-        test_data, test_labels,_ = data_loader_test.load_data()
-    elif configfile == 'config.yml':
-        test_data, test_labels,_ = data_loader_test.load_data()
+    test_data, test_labels,_ = data_loader_test.load_data()
 
     if (cgf['MODEL']['name'] == "resnet") or (cgf['MODEL']['name'] == "vgg16"):
         test_data = np.repeat(test_data,3,-1)
