@@ -8,6 +8,7 @@ from .Data_loader_lines2 import Data_loader_lines2
 from .Data_loader_shades2 import Data_loader_shades2
 from .Data_loader_shades3 import Data_loader_shades3
 from .Data_loader_snake import Data_loader_snake
+from .Data_loader_contrast import Data_loader_contrast
 
 def data_selector(data_name, arguments):
     """ Select a data loader based on `data_name` (str).
@@ -47,6 +48,8 @@ and it returns None.
         return Data_loader_shades2(arguments)
     elif (data_name.lower() == "snake"):
         return Data_loader_snake(arguments)
+    elif (data_name.lower() == 'contrast'):
+        return Data_loader_contrast(arguments)
     else:
         print('Error: Could not find data loader with name %s' % (data_name))
         return None;
