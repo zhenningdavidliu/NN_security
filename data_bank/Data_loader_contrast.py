@@ -51,8 +51,8 @@ Number of samples: %d
         data = np.ones([n,L,L])
         label = np.zeros([n,1])
         diff = np.zeros(n)
-        p1 = np.random.uniform(0.2,0.8,n)
-        p2 = np.random.uniform(0.2,0.8,n)
+        p1 = np.random.uniform(0.3,0.7,n)
+        p2 = np.random.uniform(0.3,0.7,n)
         ones = np.ones([1,L])
         zeros = np.zeros([1,L])
        
@@ -62,10 +62,10 @@ Number of samples: %d
             
             while left.sum() == right.sum():
                 
-                left = np.random.choice(2,[int((L-4)/2),L],p1[i]) 
-                right = np.random.choice(2,[int((L-4)/2),L],p2[i])
+                left = np.random.choice(2,[int((L-4)/2),L],replace = True, p = [p1[i], 1-p1[i]]) 
+                right = np.random.choice(2,[int((L-4)/2),L],replace =True, p = [p2[i], 1-p2[i]])
 
-            data[i] = np.concatenate([left,ones,zeros,zeros,ones,right])
+            data[i] = np.transpose(np.concatenate([left,ones,zeros,zeros,ones,right]))
             
             if left.sum() > right.sum():
 
