@@ -28,11 +28,13 @@ grid_size: L
 """
     def __init__(self, arguments):
         super(Data_loader_contrast, self).__init__(arguments)
-        required_keys = ['number_of_samples','grid_size']
+        required_keys = ['number_of_samples','grid_size','shift','epsilon']
 
         self._check_for_valid_arguments(required_keys, arguments)
         self.number_of_samples = arguments['number_of_samples']
         self.grid_size = arguments['grid_size']
+        self.shift = arguments['shift']
+        self.epsilon = arguments['epsilon']
     def load_data(self):
         data, label, diff = self._generate_set()
 
@@ -41,21 +43,30 @@ grid_size: L
     def __str__(self):
         class_str = """Contrast data
 Number of samples: %d
-""" % (self.number_of_samples)
+Grid size: %d
+shift: %s
+epsilon: %f
+""" % (self.number_of_samples,self.grid_size, self.shift, self.epsilon)
         return class_str
 
     def _generate_set(self, shuffle= True):
            
         n = self.number_of_samples
         L = self.grid_size
+        shift = self.shift
+        epsilon = self.epsilon
         data = np.ones([n,L,L])
         label = np.zeros([n,1])
         diff = np.zeros(n)
-        p1 = np.random.uniform(0.3,0.7,n)
-        p2 = np.random.uniform(0.3,0.7,n)
+        p1 = np.random.uniform(0,1,n)
+        p2 = np.random.uniform(0,1,n)
         ones = np.ones([1,L])
         zeros = np.zeros([1,L])
-       
+        a1 = 1- (3/2)*abs(epsilon) - epsilon/2
+        a2 = (3/2)*abs(epsilon) - epsilon/2
+        b1 = 1- (3/2)*abs(epsilon) + epsilon/2
+        b2 = (3/2)*abs(epsilon) + epsilon/2
+
         for i in range(n):
             left = np.array([0])
             right = np.array([0])
@@ -65,11 +76,24 @@ Number of samples: %d
                 left = np.random.choice(2,[int((L-4)/2),L],replace = True, p = [p1[i], 1-p1[i]]) 
                 right = np.random.choice(2,[int((L-4)/2),L],replace =True, p = [p2[i], 1-p2[i]])
 
-            data[i] = np.transpose(np.concatenate([left,ones,zeros,zeros,ones,right]))
             
             if left.sum() > right.sum():
 
                 label[i] = 1
+
+                if shift == True:
+                    
+                    data[i] = np.transpose(np.concatenate([a1*left,a1*ones,a2*ones,a2*ones,a1*ones,a1*right]))
+                else:
+                    data[i] = np.transpose(np.concatenate([left,ones,zeros,zeros,ones,right]))
+            else:
+
+                if shift == True:
+
+                    data[i] = np.transpose(np.concatenate([b1*left,b1*ones,b2*ones,b2*ones,b1*ones,b1*right]))
+                else:
+                    data[i] = np.transpose(np.concatenate([left,ones,zeros,zeros,ones,right]))
+
 
             diff[i] = (left.sum() - right.sum() + L*((L-4)/2))/(L*(L-4)) 
 
