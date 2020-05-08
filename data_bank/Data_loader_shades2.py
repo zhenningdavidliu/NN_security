@@ -31,13 +31,14 @@ shade_contrast: 0.1
 """
     def __init__(self, arguments):
         super(Data_loader_shades2, self).__init__(arguments)
-        required_keys = ['number_of_samples', 'grid_size', 'side_length', 'shade_contrast']
+        required_keys = ['number_of_samples', 'grid_size', 'side_length', 'shade_contrast','separate']
 
         self._check_for_valid_arguments(required_keys, arguments)
         self.number_of_samples = arguments['number_of_samples']
         self.grid_size = arguments['grid_size']
         self.side_length = arguments['side_length']
         self.shade_contrast = arguments['shade_contrast']
+        self.separate = arguments['separate']
     def load_data(self):
         # Two squares one on the left one on the right, different shades
         # task is to say which side is lighter
@@ -51,12 +52,16 @@ Number of samples: %d
 Grid size: %d
 Side length: %d
 Shade contrast: %g
-""" % (self.number_of_samples, self.grid_size, self.side_length, self.shade_contrast)
+separate: %d
+""" % (self.number_of_samples, self.grid_size, self.side_length, self.shade_contrast, self.separate)
         return class_str
 
 
     def _generate_set(self, shuffle= True):
-           
+        
+        separate = self.separate # only put big squares to one side for label 1, if 1, big on left side, if 2 otherwise and 0 no separation
+
+
         n = self.number_of_samples
         l = self.side_length # side length of the square inside the image
         a = self.grid_size # Size of image
@@ -67,16 +72,10 @@ Shade contrast: %g
         diff = np.zeros(n)
         for i in range(n):
 
-            i1 = np.random.randint(a-l-1) 
-            j1 = np.random.randint(a-l-1) 
-        
-            i2 = np.random.randint(a-2*l-1) 
-            j2 = np.random.randint(a-2*l-1) 
-
             shade1 = np.random.normal(0.4,0.2432)
             shade2 = np.random.normal(0.4,0.2432)
-           
-            while (((i2-i1)<l) and ((j2-j1)<l)) or (((i1-i2)<2*l) and ((j1-j2)<2*l)) :
+ 
+            if separate == 0:
 
                 i1 = np.random.randint(a-l-1) 
                 j1 = np.random.randint(a-l-1) 
@@ -84,7 +83,52 @@ Shade contrast: %g
                 i2 = np.random.randint(a-2*l-1) 
                 j2 = np.random.randint(a-2*l-1) 
 
+                while (((i2-i1)<l) and ((j2-j1)<l)) or (((i1-i2)<2*l) and ((j1-j2)<2*l)) :
 
+                    i1 = np.random.randint(a-l-1) 
+                    j1 = np.random.randint(a-l-1) 
+                
+                    i2 = np.random.randint(a-2*l-1) 
+                    j2 = np.random.randint(a-2*l-1) 
+
+            elif separate == 1:
+                
+                if shade2 > shade1 :
+
+                    i1 = np.random.randint(int(a/2)-l-1) + int(a/2) 
+                    j1 = np.random.randint(a-l-1) 
+                
+                    i2 = np.random.randint(int(a/2)-2*l-1) 
+                    j2 = np.random.randint(a-2*l-1) 
+
+                else:
+
+                    i1 = np.random.randint(int(a/2)-l-1) 
+                    j1 = np.random.randint(a-l-1) 
+                
+                    i2 = np.random.randint(int(a/2)-2*l-1) + int(a/2)
+                    j2 = np.random.randint(a-2*l-1) 
+ 
+            elif separate == 2:
+
+                if shade2>shade1:
+                    i1 = np.random.randint(int(a/2)-l-1) 
+                    j1 = np.random.randint(a-l-1) 
+                
+                    i2 = np.random.randint(int(a/2)-2*l-1) + int(a/2)
+                    j2 = np.random.randint(a-2*l-1) 
+                else:
+
+                    i1 = np.random.randint(int(a/2)-l-1) + int(a/2) 
+                    j1 = np.random.randint(a-l-1) 
+                
+                    i2 = np.random.randint(int(a/2)-2*l-1) 
+                    j2 = np.random.randint(a-2*l-1) 
+
+
+            else:
+                print("No such separation number")
+                break
 
             # Ensure all colours lie in the interval [0, 1].
             if shade1 < 0:
