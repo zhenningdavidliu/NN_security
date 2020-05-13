@@ -4,11 +4,17 @@ DATASET_TRAIN:
     name: 'shades2'
     arguments:
         number_of_samples: 10000
-        grid_size: 150 
+        grid_size: 250 
         side_length: 8
         shade_contrast: 0.1
-        separate: 1
+        separate: 0
         corners: [1, 2, 4]
+        save: True 
+        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_train_images.npy"
+        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_train_labels.npy"
+        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_train_difference.npy"
+
+
     #name: stripe_train
     #arguments:
     #    grid_size: 32
@@ -20,11 +26,17 @@ DATASET_VAL:
     name: 'shades2'
     arguments:
         number_of_samples: 2000
-        grid_size: 150 
+        grid_size: 250 
         side_length: 8
         shade_contrast: 0.1
-        separate: 1
+        separate: 0
         corners: [1, 2, 4]
+        save: True 
+        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_val_images.npy"
+        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_val_labels.npy"
+        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_val_difference.npy"
+
+
     #name: stripe_test
     #arguments:
     #    grid_size: 32
@@ -38,11 +50,17 @@ DATASET_TEST:
     name: 'shades2'
     arguments:
         number_of_samples: 2000
-        grid_size: 150 
+        grid_size: 250 
         side_length: 8
         shade_contrast: 0.1
-        separate: 2
+        separate: 0
         corners: [1, 2, 3, 4]
+        save: True 
+        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_test_images.npy"
+        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_test_labels.npy"
+        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_test_difference.npy"
+
+
 #    name: stripe_test
 #    arguments:
 #        grid_size: 32
@@ -65,7 +83,7 @@ MODEL_METADATA:
     dest_model: model
     model_number_type: fixed
     model_number_arguments:
-        model_id: 11 
+        model_id: 1 
         counter_path: ./
     save_best_model:
         use_model_checkpoint: yes
@@ -103,7 +121,7 @@ TRAIN:
 
 COMPUTER_SETUP:
     use_gpu: yes
-    compute_node: 1
+    compute_node: 0
 
 INFORMATION_TRAIN:
     save_every: 10

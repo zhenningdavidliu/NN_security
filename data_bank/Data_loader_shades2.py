@@ -14,6 +14,10 @@ number_of_samples (int): Number of images generated for the test
 grid_size (int): Size of images (grid_size x grid_size)
 side_length (int): Size of squares (side_length x side_length)
 shade_contrast (int): the minimal distance between two colors of grey
+save (bool): Whether the generated images are saved to a text file for future reference.
+images (string): The name of the file into which the generated images are saved.
+labels (string): The name of the file into which the generated labels are saved (if save == True).
+difference (string): The name of the file into which the generated differences are saved.
 
 Methods
 -------
@@ -26,6 +30,10 @@ number_of_samples: 2000
 grid_size: 64
 side_length: 4
 shade_contrast: 0.1
+save: True
+images: data_train_images
+labels: data_train_labels
+difference: data_train_difference
 -----------------
 
 """
@@ -39,6 +47,10 @@ shade_contrast: 0.1
         self.side_length = arguments['side_length']
         self.shade_contrast = arguments['shade_contrast']
         self.separate = arguments['separate']
+        self.save = arguments['save']
+        self.images = arguments['images']
+        self.labels = arguments['labels']
+        self.difference = arguments['difference']
     def load_data(self):
         # Two squares one on the left one on the right, different shades
         # task is to say which side is lighter
@@ -53,7 +65,13 @@ Grid size: %d
 Side length: %d
 Shade contrast: %g
 separate: %d
-""" % (self.number_of_samples, self.grid_size, self.side_length, self.shade_contrast, self.separate)
+Save: %s 
+Images: %s 
+Labels: %s 
+Difference: %s 
+
+""" % (self.number_of_samples, self.grid_size, self.side_length, self.shade_contrast, self.separate, self.save, self.images, self.labels, self.difference)
+
         return class_str
 
 
@@ -160,6 +178,15 @@ separate: %d
 
         data = np.expand_dims(data, axis = 3)
 
+        image_link = self.images
+        label_link = self.labels
+        diff_link = self.difference
+
+        if self.save == True:
+            np.save(image_link, data)
+            np.save(label_link, label)
+            np.save(diff_link, diff)
+        
         return data, label, diff
 
 
