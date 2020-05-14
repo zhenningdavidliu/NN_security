@@ -4,16 +4,16 @@ DATASET_TRAIN:
     name: 'shades2'
     arguments:
         number_of_samples: 10000
-        grid_size: 250 
+        grid_size: 128 
         side_length: 8
         shade_contrast: 0.1
         separate: 0
         corners: [1, 2, 4]
         save: True 
-        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_train_images.npy"
-        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_train_labels.npy"
-        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_train_difference.npy"
-
+        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_train_images"
+        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_train_labels"
+        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_train_difference"
+        model: 1
 
     #name: stripe_train
     #arguments:
@@ -26,16 +26,16 @@ DATASET_VAL:
     name: 'shades2'
     arguments:
         number_of_samples: 2000
-        grid_size: 250 
+        grid_size: 128 
         side_length: 8
         shade_contrast: 0.1
         separate: 0
         corners: [1, 2, 4]
         save: True 
-        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_val_images.npy"
-        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_val_labels.npy"
-        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_val_difference.npy"
-
+        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_val_images"
+        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_val_labels"
+        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_val_difference"
+        model: 1
 
     #name: stripe_test
     #arguments:
@@ -50,16 +50,16 @@ DATASET_TEST:
     name: 'shades2'
     arguments:
         number_of_samples: 2000
-        grid_size: 250 
+        grid_size: 128 
         side_length: 8
         shade_contrast: 0.1
         separate: 0
         corners: [1, 2, 3, 4]
         save: True 
-        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_test_images.npy"
-        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_test_labels.npy"
-        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_test_difference.npy"
-
+        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_test_images"
+        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_test_labels"
+        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_test_difference"
+        model: 1
 
 #    name: stripe_test
 #    arguments:

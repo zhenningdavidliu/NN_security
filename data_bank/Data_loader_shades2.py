@@ -1,7 +1,6 @@
 from .Data_loader import Data_loader
 import numpy as np
 import random
-
 class Data_loader_shades2(Data_loader):
     """
 This experiment is creating squares collored in different shades of grey and checking how humans and AI compare in both
@@ -18,6 +17,7 @@ save (bool): Whether the generated images are saved to a text file for future re
 images (string): The name of the file into which the generated images are saved.
 labels (string): The name of the file into which the generated labels are saved (if save == True).
 difference (string): The name of the file into which the generated differences are saved.
+model (string): name of the model 
 
 Methods
 -------
@@ -34,6 +34,7 @@ save: True
 images: data_train_images
 labels: data_train_labels
 difference: data_train_difference
+model: 1
 -----------------
 
 """
@@ -51,6 +52,7 @@ difference: data_train_difference
         self.images = arguments['images']
         self.labels = arguments['labels']
         self.difference = arguments['difference']
+        self.model_number = arguments['model']        
     def load_data(self):
         # Two squares one on the left one on the right, different shades
         # task is to say which side is lighter
@@ -69,8 +71,9 @@ Save: %s
 Images: %s 
 Labels: %s 
 Difference: %s 
+Model : %s
 
-""" % (self.number_of_samples, self.grid_size, self.side_length, self.shade_contrast, self.separate, self.save, self.images, self.labels, self.difference)
+""" % (self.number_of_samples, self.grid_size, self.side_length, self.shade_contrast, self.separate, self.save, self.images, self.labels, self.difference, self.model_number)
 
         return class_str
 
@@ -88,6 +91,7 @@ Difference: %s
         data = np.ones([n,a,a])
         label = np.zeros([n,1])
         diff = np.zeros(n)
+        model_number = self.model_number
         for i in range(n):
 
             shade1 = np.random.normal(0.4,0.2432)
@@ -182,6 +186,10 @@ Difference: %s
         label_link = self.labels
         diff_link = self.difference
 
+        image_link = image_link + str(model_number) + ".npy"
+        label_link = label_link + str(model_number) +".npy"
+        diff_link = diff_link + str(model_number) + ".npy"
+        
         if self.save == True:
             np.save(image_link, data)
             np.save(label_link, label)

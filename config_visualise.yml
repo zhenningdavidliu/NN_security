@@ -1,14 +1,28 @@
 
-data_name: snake 
+data_name: shades2
 data_arguments:
-    number_of_samples: 300
-    grid_size: 224
-    shift: False 
-    epsilon: 1
-    save: False 
-    images: "data_trainn_images"
-    labels: "data_trainn_labels"
-    difference: "data_trainn_diff"
+    number_of_samples: 500
+    grid_size: 150 
+    side_length: 8
+    shade_contrast: 0.1
+    separate: 0
+    corners: [1,2,4]
+    save: False
+    images: ""
+    labels: ""
+    difference: ""
+    model: 1
+
+#data_name: contrast 
+#data_arguments:
+#    number_of_samples: 300
+#    grid_size: 224
+#    shift: False 
+#    epsilon: 1
+#    save: False 
+#    images: "data_trainn_images"
+#    labels: "data_trainn_labels"
+#    difference: "data_trainn_diff"
 #data_arguments:
 #    grid_size: 32
 #    line_width:  3

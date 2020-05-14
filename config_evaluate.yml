@@ -1,16 +1,16 @@
 MODEL:
-    model_id: 9
+    model_id: 1 
     model_dest: model
 
 DATASET:
-    use_default: no
-    name: 'shades3'
-    arguments:
-        number_of_samples: 5000
-        grid_size: 256
-        side_length: 8
-        shade_contrast: 0.1
-        corners: [3]
+    use_default: no 
+    #name: 'shades3'
+    #arguments:
+    #    number_of_samples: 5000
+    #    grid_size: 256
+    #    side_length: 8
+    #    shade_contrast: 0.1
+    #    corners: [3]
     #name: stripe_test
     #arguments:
     #    grid_size: 32
@@ -19,5 +19,29 @@ DATASET:
     #    flip_a_values: False 
     #    data_size: 10000
     #    low_a_value: 0.000
+    #name: lines
+    #arguments:
+    #    number_of_samples: 1000
+    #    grid_size: 224
+    #    side_length: 50
+    #    width: 4
+    #    shift: True
+    #    color_shift: -0.01
+    #    save: True
+    #    images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_eval_images.npy"
+    #    labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_eval_labels.npy"
+    #    difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_eval_difference.npy"
 
-
+    name: shades2 
+    arguments:
+        number_of_samples: 1000
+        grid_size: 128 
+        side_length: 8
+        shade_contrast: 0.1
+        separate: 0
+        corners: [1,2,4]
+        save: False
+        images: ""
+        labels: ""
+        difference: ""
+        model: 1
