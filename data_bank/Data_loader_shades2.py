@@ -93,10 +93,24 @@ Model : %s
         diff = np.zeros(n)
         model_number = self.model_number
         for i in range(n):
+            
+            shade1 = 0
+            shade2 = 0
 
-            shade1 = np.random.normal(0.4,0.2432)
-            shade2 = np.random.normal(0.4,0.2432)
- 
+            while(abs(shade2-shade1)<e):
+
+                shade1 = np.random.normal(0.4,0.2432)
+                shade2 = np.random.normal(0.4,0.2432)
+     
+                if shade1 < 0:
+                    shade1 = 0
+                if shade1 > 0.8:
+                    shade1 = 0.8
+                if shade2 < 0:
+                    shade2 = 0
+                if shade2 > 0.8:
+                    shade2 = 0.8
+                
             if separate == 0:
 
                 i1 = np.random.randint(a-l-1) 
@@ -151,23 +165,6 @@ Model : %s
             else:
                 print("No such separation number")
                 break
-
-            # Ensure all colours lie in the interval [0, 1].
-            if shade1 < 0:
-                shade1 = 0
-            if shade1 > 0.8:
-                shade1 = 0.8
-            if shade2 < 0:
-                shade2 = 0
-            if shade2 > 0.8:
-                shade2 = 0.8
-            
-            if (abs(shade2-shade1) < e):
-                shade2 = shade1 + e
-            
-            if shade2>0.8:
-                shade1 = shade1 - (shade2 - 0.8)
-                shade2 = 0.8
 
             for j in range(i1,i1+l):
                 for k in range(j1,j1+l):
