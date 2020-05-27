@@ -98,7 +98,7 @@ Model : %s
             shade2 = 0
 
             while(abs(shade2-shade1)<e):
-
+                
                 shade1 = np.random.normal(0.4,0.2432)
                 shade2 = np.random.normal(0.4,0.2432)
      
@@ -111,6 +111,10 @@ Model : %s
                 if shade2 > 0.8:
                     shade2 = 0.8
                 
+                """
+                shade1 = np.random.uniform(0,0.8)
+                shade2 = np.random.uniform(0,0.8)
+                """
             if separate == 0:
 
                 i1 = np.random.randint(a-l-1) 
