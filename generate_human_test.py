@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 import tensorflow
 import model_builders as mb
 import tensorflow as tf
-from Data_loader_shades import Data_loader_shades
-from Data_loader_lines import Data_loader_lines
+from data_bank import data_selector
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Activation, Conv1D, Conv2D, Flatten
 import os
@@ -44,20 +43,30 @@ if __name__=='__main__':
 
     with open('experiment.yml') as ymlfile:
         cgf = yaml.load(ymlfile, Loader= yaml.SafeLoader);
+
     n = cgf['TEST']['arguments']['number_of_samples']
     l = cgf['TEST']['arguments']['grid_size']
-    input_shape = (l,l,1)
-    output_shape = (1)
 
-    weights_path = "model/1/keras_model_files.h5"
+    data_name = cgf['TEST']['name']
+    data_arguments = cgf['TEST']['arguments']
 
-    if cgf['MODEL']['name'].lower() == 'cnndrop':
-        model = mb.build_model_cnndrop(input_shape, output_shape, cgf['MODEL']['arguments'])
-    elif cgf['MODEL']['name'].lower() == 'fc3':
-        model = mb.build_model_fc3(input_shape, output_shape, cgf['MODEL']['arguments'])
-    else:
-        print('Error: model not found')
-    
+    data_loader = data_selector(data_name, data_arguments)
+
+    experiment_data, experiment_labels, experiment_diff = data_loader.load_data()
+
+    input_shape = experiment_data.shape[1:]
+    output_shape = experiment_labels.shape[1]
+
+    model_id = cgf['TEST']['arguments']['model']
+    model_dest = cgf['MODEL']['model_dest']
+    model_path = join(model_dest, str(model_id))
+
+    weights_path = join(model_path, "keras_model_files.h5")
+
+    model_name = cgf['MODEL']['name']
+    model_arguments = cgf['MODEL']['arguments']
+    model = mb.model_selector(model_name, input_shape, output_shape, model_arguments)
+
     model.load_weights(weights_path)
 
     optimizer = cgf['TRAIN']['optim']['type']
@@ -68,8 +77,6 @@ if __name__=='__main__':
                   loss=loss_type,
                   metrics = metric_list)
 
-    data_experiment = Data_loader_shades(cgf['TEST']['arguments'])
-    experiment_data, experiment_labels, experiment_diff= data_experiment.load_data2()
 
     results = model.predict(experiment_data)
 
@@ -103,7 +110,7 @@ if __name__=='__main__':
     print("The percentage of wrong labels with high confidence amongst wrong labels is {} %".format(100*len(strongly_confident_mistake)/(n-acc)))
    
 
-    all_path = join("experiment","all")
+    all_path = join("experimentt","all")
 
     color_mode = 'L'
 
@@ -139,7 +146,7 @@ if __name__=='__main__':
         for j in range(n):
             f.write("On picture number {} the confidence is: {}\n".format(j, pred_conf[j]))
 
-    mistakes_path = join("experiment","wrong")
+    mistakes_path = join("experimentt","wrong")
 
     for j in wrongly_labeled_images:
         '''
