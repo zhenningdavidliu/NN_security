@@ -135,7 +135,7 @@ if __name__=='__main__':
 
     with open(all_path_labels, 'w') as f:
         for j in range(n):
-            f.write("The label for {} is {}\n".format(j, pred_labels[j]))
+            f.write("The label for {} is {} with confidence {}. The true label is {} with difference {} \n".format(j, pred_labels[j], pred_conf[j],experiment_labels[j],experiment_diff[j]))
 
     all_path_confidences = join(all_path, "confidences.txt")
     
