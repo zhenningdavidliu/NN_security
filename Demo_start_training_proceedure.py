@@ -28,7 +28,7 @@ if __name__ == "__main__":
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
     
     # Load configuration file
-    configfile = 'config_lines.yml'
+    configfile = 'config_exist.yml'
     with open(configfile) as ymlfile:
         cgf = yaml.load(ymlfile, Loader=yaml.SafeLoader);
 
@@ -60,14 +60,19 @@ Use gpu: {}""".format(use_gpu))
     
     train_data, train_labels,_ = data_loader_train.load_data();
     val_data, val_labels,_ = data_loader_validate.load_data();
+    
+    # Trying for resnet since memory seems to be the issue
+    train_data = train_data[:3000,:,:]
+    train_labels = train_labels[:3000] 
+
 
     if (cgf['MODEL']['name'] == "resnet") or (cgf['MODEL']['name'] == "vgg16"):
         train_data = np.repeat(train_data,3,-1)
         val_data = np.repeat(val_data,3,-1)
-        train_data = tf.cast(train_data, dtype=tf.float16)
-        val_data = tf.cast(val_data, dtype=tf.float16)
-        train_labels = tf.cast(train_labels, dtype=tf.float16)
-        val_labels = tf.cast(val_labels, dtype=tf.float16)
+        train_data = tf.cast(train_data, dtype=tf.float32)
+        val_data = tf.cast(val_data, dtype=tf.float32)
+        train_labels = tf.cast(train_labels, dtype=tf.float32)
+        val_labels = tf.cast(val_labels, dtype=tf.float32)
         train_data= preprocess_input(train_data)
         val_data= preprocess_input(val_data)
 
@@ -191,6 +196,9 @@ Model dest: {}""".format(model_number_type, model_number, dest_model))
 
     print('\nStart training the model\n')
     # Train model :)
+
+    print("PROBLEM IN TRAINING")
+
     print(shuffle_data)
     print(callbacks)
     history = model.fit(train_data, train_labels, 

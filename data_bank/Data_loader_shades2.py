@@ -7,12 +7,18 @@ This experiment is creating squares collored in different shades of grey and che
 accuracy and confidence estimate. We set the squares to have a fixed length and all squares have to be fully withing the
 image. Further we assing a "shade_contrast" value which tells us how different the shades of grey should be.
 
+Unlike shades experiment, shades2 has the option of adding some false structures to it. This is done by the parameter separate (e.g. separate=1 means that the darker square will be on the left half plane whereas the lighter is on the right halfplane)
+
+We also allow the possibility for background noise according to Task 1. This is set by the boolean variable "noise".
+
 Attributes
 ----------
 number_of_samples (int): Number of images generated for the test
 grid_size (int): Size of images (grid_size x grid_size)
 side_length (int): Size of squares (side_length x side_length)
-shade_contrast (int): the minimal distance between two colors of grey
+shade_contrast (float): the minimal distance between two colors of grey
+separate (int) : either 0,1,2 depending on which mode we want. Mode 0 is neutral, i.e. there is no false structure. Modes 1,2 are when the darker color always occupy one half of the image (modes 1 and 2 are exact oposites so one puts them on the right, the other on the left) 
+noise (bool): Whether it is Task 0 (False) or Task 1 (True)
 save (bool): Whether the generated images are saved to a text file for future reference.
 images (string): The name of the file into which the generated images are saved.
 labels (string): The name of the file into which the generated labels are saved (if save == True).
@@ -30,6 +36,8 @@ number_of_samples: 2000
 grid_size: 64
 side_length: 4
 shade_contrast: 0.1
+separate: 0
+noise: False
 save: True
 images: data_train_images
 labels: data_train_labels
@@ -40,7 +48,7 @@ model: 1
 """
     def __init__(self, arguments):
         super(Data_loader_shades2, self).__init__(arguments)
-        required_keys = ['number_of_samples', 'grid_size', 'side_length', 'shade_contrast','separate']
+        required_keys = ['number_of_samples', 'grid_size', 'side_length', 'shade_contrast','separate', 'noise']
 
         self._check_for_valid_arguments(required_keys, arguments)
         self.number_of_samples = arguments['number_of_samples']
@@ -48,6 +56,7 @@ model: 1
         self.side_length = arguments['side_length']
         self.shade_contrast = arguments['shade_contrast']
         self.separate = arguments['separate']
+        self.noise = arguments['noise']
         self.save = arguments['save']
         self.images = arguments['images']
         self.labels = arguments['labels']
@@ -87,11 +96,14 @@ Model : %s
         l = self.side_length # side length of the square inside the image
         a = self.grid_size # Size of image
         e = self.shade_contrast
+        noise = self.noise
 
         data = np.ones([n,a,a])
         label = np.zeros([n,1])
         diff = np.zeros(n)
         model_number = self.model_number
+        
+
         for i in range(n):
             
             shade1 = 0
@@ -181,6 +193,13 @@ Model : %s
             if shade1>shade2:
                 label[i] = 1 # Left is brighter
 
+
+            if noise:
+
+                epsilon_noise = min(shade1, shade2, abs(shade1-shade2), 1-shade1, 1-shade2)/4
+                data[i, :, :] += np.random.uniform(0, epsilon_noise, (a, a)) 
+
+
         data = np.expand_dims(data, axis = 3)
 
         image_link = self.images
@@ -195,7 +214,8 @@ Model : %s
             np.save(image_link, data)
             np.save(label_link, label)
             np.save(diff_link, diff)
-        
+        print("Data shades2 generated. Amount: {}".format(n))
+
         return data, label, diff
 
 

@@ -1,7 +1,8 @@
 import tensorflow as tf
 import numpy as np
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Activation, Conv1D, Conv2D, Flatten, MaxPooling2D, Dropout
+from tensorflow import Tensor
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Dense, Activation, Conv1D, Conv2D, Flatten, MaxPooling2D, Dropout, Input, Add, BatchNormalization, ReLU
 from tensorflow.keras import regularizers
 from tensorflow.keras.applications.resnet50 import ResNet50
 from tensorflow.keras.applications.vgg16 import VGG16
@@ -34,33 +35,88 @@ Keras model
     elif model_name.lower() == "cnndrop":
         return build_model_cnndrop(input_shape, output_shape, arguments)
     elif model_name.lower() == "resnet":
-        return build_model_resnet(input_shape, output_shape, arguments)
+        return build_model_resnet(output_shape, arguments, input_shape)
     elif model_name.lower() == "vgg16":
-        return build_model_vgg16(input_shape, output_shape, arguments)
+        return build_model_vgg16(output_shape, arguments, input_shape)
     else:
         print('Error: Could not find model with name %s' % (model_name))
         return None;
 
-def build_model_resnet(input_shape, output_shape, arguments):
-    
+def build_model_resnet(output_shape, arguments, input_shape=(224, 224, 3)):
+   
+    inputs = Input(shape=input_shape)
     final_act = arguments['final_act']
 
-    model = Sequential()
+    y = ResNet50(input_tensor = inputs, weights = None, include_top=False)
 
-    model.add(ResNet50(include_top=False))
+    y = Flatten(name="flatten")(y.output)
+    
+    output = Dense(output_shape, activation=final_act)(y)
 
-    model.add(Flatten())
-    model.add(Dense(output_shape,activation=final_act))
+    model = Model(inputs, output)
 
     return model
 
-def build_model_vgg16(input_shape, output_shape, arguments):
+
+def relu_bn(inputs: Tensor) -> Tensor:
+    
+    relu = ReLu()(inputs)
+    bn = BatchNormalization()(relu)
+    
+    return bn
+
+def residual_block(x: Tensor, downsample: bool, filters: int, kernel_size: int=3) -> Tensor:
+
+    y = Conv2D(kernel_size = kernel_size,
+            strides = (1 if not downsample else 2),
+            filters=filters,
+            padding="same")(x)
+
+    y = relu_bn(y)
+    y = Conv2d(kernel_size = kernel_size, 
+                strides=1,
+                filters=filters,
+                padding="same")(y)
+
+    if downsample:
+        x = Conv2D(kernel_size=1,
+                strides=2,
+                filters=filters,
+                padding="same")(x)
+
+    out = Add()([x, y])
+    out = relu_bn(out)
+    return out
+
+'''
+def build_model_resnet(output_shape, arguments, input_shape=(224,224,3)):
+
+    inputs = Input(shape=(input_shape))
+    num_filters = 64
+
+    t = BatchNormalization()(inputs)
+    t = Conv2D(kernel_size=3,
+            strides=1,
+            filters=num_filters,
+            padding="same")(t)
+    t = relu_bn(t)
+
+    num_blocks_list = [2, 5, 5, 2]
+    
+    for i in range(len(num_blocks_list)):
+        num_blocks = num_blocks_list[i]
+
+
+    return model
+'''
+
+def build_model_vgg16(output_shape, arguments, input_shape=(224,224,3)):
 
     final_act = arguments['final_act']
 
     model = Sequential()
 
-    model.add(ResNet50(include_top=False, input_shape = (224,224,3)))
+    model.add(VGG16(include_top=False, input_shape = input_shape))
 
     model.add(Flatten())
     model.add(Dense(output_shape,activation=final_act))
