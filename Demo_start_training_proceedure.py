@@ -226,13 +226,13 @@ Model dest: {}""".format(model_number_type, model_number, dest_model))
     print('\nDATASET TEST')
     print(data_loader_test)
     
-    test_data, test_labels,_ = data_loader_test.load_data()
+    test_data, test_labels, _ = data_loader_test.load_data()
 
     if (cgf['MODEL']['name'] == "resnet") or (cgf['MODEL']['name'] == "vgg16"):
         test_data = np.repeat(test_data,3,-1)
         test_data = tf.cast(test_data, dtype=tf.float16)   
         test_labels = tf.cast(test_labels, dtype=tf.float16)
-        test_data= preprocess_input(test_data) 
-    score = model.evaluate(test_data, test_labels, verbose=0)
+        test_data = preprocess_input(test_data) 
+    score = model.evaluate(test_data, test_labels, verbose=0, batch_size=batch_size)
     print('Accuracy on test set: {}%'.format(100*score[1]))
 

@@ -1,9 +1,10 @@
 DATASET_TRAIN:
+    
     name: 'existing'
     arguments:
-        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_train_images"
-        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_train_labels"
-        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_train_difference"
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_train_images"
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_train_labels"
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_train_difference"
         model: 1
 
     #name: stripe_train
@@ -16,9 +17,9 @@ DATASET_TRAIN:
 DATASET_VAL:
     name: 'existing'
     arguments:
-        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_val_images"
-        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_val_labels"
-        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_val_difference"
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_val_images"
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_val_labels"
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_val_difference"
         model: 1
 
     #name: stripe_test
@@ -33,9 +34,9 @@ DATASET_VAL:
 DATASET_TEST:
     name: 'existing'
     arguments:
-        images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_test_images"
-        labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_test_labels"
-        difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_test_difference"
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_test_images"
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_test_labels"
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_test_difference"
         model: 1
 
 #    name: stripe_test
@@ -73,7 +74,7 @@ MODEL_METADATA:
             period: 1
 
 TRAIN:
-    batch_size: 1 
+    batch_size: 2 
     shuffle: no
     validate_every: 1000
     optim:
