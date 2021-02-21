@@ -44,15 +44,15 @@ DATASET_TEST:
 #        grid_size: 32
 #        line_width:  3
 #        a: 0.01
-#        flip_a_values: True 
+#        flip_a_values: True
 #        data_size: 1000
 #        low_a_value: 0.000
 
 MODEL:
-    name: vgg16 
-    arguments:    
+    name: fc3
+    arguments:
         act: relu
-        final_act: sigmoid
+        final_act: none
         bias_initializer: zeros
 
 MODEL_METADATA:
@@ -61,27 +61,30 @@ MODEL_METADATA:
     dest_model: model
     model_number_type: fixed
     model_number_arguments:
-        model_id: 105 
+        model_id: 20
         counter_path: ./
     save_best_model:
         use_model_checkpoint: yes
         arguments:
-            filepath: best_model_vgg16.h5
+            filepath: best_model_fc3.h5
             monitor: val_acc
             verbose: 1
             save_best_only: False
             mode: max
             period: 1
+    save_model:
+        arguments:
+            filepath: best_model_fc3.h5
 
 TRAIN:
-    batch_size: 70 
+    batch_size: 50
     shuffle: no
     validate_every: 1000
     optim:
         type: adam
         arguments:
             param1: none
-    max_epoch: 100 
+    max_epoch: 100
     stopping_criteria:
         type: epoch
         arguments:
@@ -91,7 +94,7 @@ TRAIN:
             patience: 5
 
     loss:
-        type: binary_crossentropy
+        type: SparseCategoricalCrossentropy #sparse_softmax_cross_entropy_with_logits
         arguments:
             param1: none
     metrics:
@@ -99,7 +102,7 @@ TRAIN:
 
 COMPUTER_SETUP:
     use_gpu: yes
-    compute_node: 0
+    compute_node: 2
 
 INFORMATION_TRAIN:
     save_every: 10
@@ -108,5 +111,3 @@ INFORMATION_TRAIN:
         font_size: 15
         loss_train: no
         accuracy_train: no
-
-

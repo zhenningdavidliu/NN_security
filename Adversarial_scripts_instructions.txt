@@ -1,0 +1,18 @@
+The relevant script to run is gen_adversarial.py 
+
+This script loads config_adv.yml which loads the model and the attack.
+Currently the dataset name is set to 'existing' which just load saved
+images instead of creating them anew. There are some inefficiencies here
+(in config_adv.yml) in that one needs to adjust :
+
+the model name needs to be set,
+the model id and filepath must correspond to that model.
+
+The other thing is that within gen_adversarial there are
+for loops which just takes a chunk of the datased and 
+tries to apply the attack on it. So far its just spaghetti
+code but the aim is to get 1 example running (which it
+currently fails to do for FGSM)
+
+you might need to clone foolbox locally and dont forget to
+downgrade TF version to 2.1.0. 
