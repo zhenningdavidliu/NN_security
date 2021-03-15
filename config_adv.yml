@@ -1,5 +1,5 @@
 ATTACK:
-    name: 'FGSM'
+    name: 'L2DeepFoolAttack'
     arguments:
         epsilon: 'custom'
 
@@ -13,15 +13,28 @@ DATASET:
         separate: 0
         corners: [1, 2, 4]
         save: True 
-        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_train_images" 
-        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_train_labels" 
-        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_train_difference" 
-        adv_images: "data/adv_imagesFGSM"
-        adv_labels: "data/adv_labelsFGSM"
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_imagesnoiseless" 
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_labels" 
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_difference" 
+        original_images: "data/original_images_resnet_L2DF2"
+        adv_images: "data/adv_images_resnet_L2DF2"
+        adv_labels: "data/adv_labels_resnet_L2DF2"
+        model: 1
+    train_arguments:
+        number_of_samples: 1
+        grid_size: 224
+        side_length: 8
+        shade_contrast: 0.15
+        separate: 0
+        corners: [1, 2, 4]
+        save: True 
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_images"
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_labels" 
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_difference" 
         model: 1
 
 MODEL:
-    name: fc3
+    name: resnet
     arguments:    
         act: relu
         final_act: sigmoid
@@ -33,12 +46,12 @@ MODEL_METADATA:
     dest_model: model
     model_number_type: fixed
     model_number_arguments:
-        model_id: 8 
+        model_id: 300
         counter_path: ./
     save_best_model:
         use_model_checkpoint: yes
         arguments:
-            filepath: best_model_fc3.h5
+            filepath: best_model_resnet.h5
             monitor: val_acc
             verbose: 1
             save_best_only: False
@@ -63,7 +76,7 @@ TRAIN:
             patience: 5
 
     loss:
-        type: binary_crossentropy
+        type: SparseCategoricalCrossentropy
         arguments:
             param1: none
     metrics:
