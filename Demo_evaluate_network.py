@@ -7,6 +7,8 @@ from data_bank import data_selector
 from tensorflow.keras import backend as K
 #from tensorflow.keras.models import Sequential
 #from tensorflow.keras.layers import Dense, Activation, Conv1D, Conv2D, Flatten
+from tensorflow.keras.resnet50 import preprocess_input as res_prep
+from tensorflow.keras.vgg16 import preprocess_input as vgg_prep
 import os
 from os.path import join
 #from PIL import Image
@@ -91,6 +93,8 @@ if __name__ == "__main__":
     print(data_loader)
     test_data, test_labels, test_diff = data_loader.load_data()
 
+    print(test_data.shape)
+
     model_name = cgf['MODEL']['name']
     model_arguments = cgf['MODEL']['arguments']
 
@@ -102,8 +106,9 @@ if __name__ == "__main__":
     K.set_floatx(model_precision)
 
     model = mb.model_selector(model_name, input_shape, output_shape, model_arguments)
-
-    keras_weights_path = join(model_path, "keras_model_files.h5")
+    
+    filepath = cgf['MODEL_METADATA']['save_best_model']['arguments']['filepath']
+    keras_weights_path = join(model_path, filepath)
     model.load_weights(keras_weights_path)
 
     # Extract training information
@@ -131,8 +136,19 @@ stopping_criteria: {}""".format(loss_type, optimizer, batch_size, shuffle_data,
                   loss=loss_type,
                   metrics = metric_list)
 
+    if cgf['MODEL']['name'] == 'resnet':
+        test_data = np.repeat(test_data,3, -1)
+        test_data = tf.cast(test_data, dtype = tf.float16)
+        test_labels = tf.cast(test_labels, dtype = tf.float16)
+        test_data = res_prep(test_data)
+        
+    elif cgf['MODEL']['name'] == 'vgg16':
+        test_data = np.repeat(test_data,3, -1)
+        test_data = tf.cast(test_data, dtype = tf.float16)
+        test_labels = tf.cast(test_labels, dtype = tf.float16)
+        test_data = vgg_prep(test_data)
+        
 
-    
 
     results = model.predict(test_data) # Values between 0 and 1.
     score = model.evaluate(test_data, test_labels, verbose=0)

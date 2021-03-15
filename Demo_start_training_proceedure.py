@@ -8,19 +8,21 @@ import shutil
 import uuid
 from tensorflow.keras import backend as K
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+from tensorflow.keras.losses import SparseCategoricalCrossentropy
+from tensorflow.keras.metrics import SparseCategoricalAccuracy
 from nn_tools import read_count
 import tensorflow as tf
 from data_bank import data_selector
 import model_builders as mb
 #from SaveWeights import MyCallback
+from validation import Validation_Callback
 import os
 from os.path import join
 import matplotlib.pyplot as plt;
 import numpy as np;
 import sys
 from tensorflow.keras.applications.resnet50 import preprocess_input
-
-
+import gc
 
 if __name__ == "__main__":
     """Train a full model based on the settings in `config.yml`"""
@@ -28,7 +30,7 @@ if __name__ == "__main__":
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
     
     # Load configuration file
-    configfile = 'config_exist.yml'
+    configfile = 'config_exist2.yml'
     with open(configfile) as ymlfile:
         cgf = yaml.load(ymlfile, Loader=yaml.SafeLoader);
 
@@ -61,9 +63,19 @@ Use gpu: {}""".format(use_gpu))
     train_data, train_labels,_ = data_loader_train.load_data();
     val_data, val_labels,_ = data_loader_validate.load_data();
     
+    ''' 
+    # convert to logits
+    train_labels = to_onehot(train_labels)
+    val_labels = to_onehot(val_labels)
+    '''
+
     # Trying for resnet since memory seems to be the issue
-    train_data = train_data[:3000,:,:]
-    train_labels = train_labels[:3000] 
+    train_data = tf.convert_to_tensor(train_data[:3000,:,:])
+    train_labels = tf.convert_to_tensor(train_labels[:3000] )
+    val_data = tf.convert_to_tensor(val_data)
+    val_labels = tf.convert_to_tensor(val_labels)
+
+
 
 
     if (cgf['MODEL']['name'] == "resnet") or (cgf['MODEL']['name'] == "vgg16"):
@@ -92,10 +104,7 @@ name: {}
 arguments:""".format(model_name))
     for key, value in cgf['MODEL']['arguments'].items():
         print("\t{}: {}".format(key,value))
-
-    # Load model
-    model = mb.model_selector(model_name, input_shape, output_shape, model_arguments)
-
+    
     # Extract training information
     loss_type = cgf['TRAIN']['loss']['type']
     optimizer = cgf['TRAIN']['optim']['type']
@@ -112,7 +121,7 @@ shuffle data between epochs: {}
 max epoch: {}
 stopping_criteria: {}""".format(loss_type, optimizer, batch_size, shuffle_data, 
            max_epoch, stpc_type))
-
+ 
     callbacks = None
     if stpc_type.lower() == 'epoch' or stpc_type.lower() == 'epochs':
         callbacks = None
@@ -126,6 +135,27 @@ stopping_criteria: {}""".format(loss_type, optimizer, batch_size, shuffle_data,
         print('Unknown stopping criteria')
         callbacks = None
     print('')
+
+
+    # sparse softmax 
+    if loss_type == 'SparseCategoricalCrossentropy':
+        loss_type = SparseCategoricalCrossentropy(from_logits=True) 
+        metric_list = [SparseCategoricalAccuracy()]
+        #loss_type = tf.nn.sparse_softmax_cross_entropy_with_logits
+        # output_shape = to_onehot(train_labels).shape[0]
+        # train_labels += 1
+        output_shape = 2
+        train_labels = np.reshape(train_labels, (-1))
+        # val_labels += 1
+        val_labels = np.reshape(val_labels, (-1))
+        #opt = tf.keras.optimizers.Adam(learning_rate=0.1)
+
+
+    # Load model
+    model = mb.model_selector(model_name, input_shape, output_shape, model_arguments)
+
+  
+    print(train_labels)
     # Compile model
     model.compile(optimizer = optimizer, 
                  loss = loss_type,
@@ -194,10 +224,19 @@ Model dest: {}""".format(model_number_type, model_number, dest_model))
     callbacks.append(mycallback)
     '''
 
+    # Put valiation into callback
+
+    validationCallback = Validation_Callback(validation_data = (val_data, val_labels), interval = 1) 
+    if callbacks == None:
+        callbacks = [validationCallback]
+    else:
+        callbacks.append(validationCallback)
+
+    if cgf['TRAIN']['loss']['type']== 'SparseCategoricalCrossentropy': 
+        callbacks = None
+
     print('\nStart training the model\n')
     # Train model :)
-
-    print("PROBLEM IN TRAINING")
 
     print(shuffle_data)
     print(callbacks)
@@ -208,10 +247,23 @@ Model dest: {}""".format(model_number_type, model_number, dest_model))
               shuffle=shuffle_data,
               callbacks = callbacks)
 
+    '''
+    This is the old save format
+    '''
     if save_final_model:
-        full_file_name = join(full_dest_model, 'keras_model_files.h5')
-        model.save(join(full_dest_model, 'keras_model_files.h5'), save_format='h5')
+        filepath = cgf['MODEL_METADATA']['save_model']['arguments']['filepath']
+        full_file_name = join(full_dest_model, filepath)
+        model.save(join(full_dest_model, filepath), save_format='h5')
         print('Saved model as {}'.format(full_file_name))
+    '''
+    This is the new save format
+    '''
+    '''
+    if save_final_model:
+        full_file_name = join(full_dest_model, 'keras_model_files')
+        model.save(join(full_dest_model, 'keras_model_files'))
+        print('Saved model as {}'.format(full_file_name))
+    '''
 
     # plot the loss history
     '''
@@ -221,12 +273,28 @@ Model dest: {}""".format(model_number_type, model_number, dest_model))
     plt.plot(index,loss_hist);
     plt.savefig(join(full_dest_model, 'loss_graph.png'));
     '''
+
+    gc.collect()
+    K.clear_session()
+
     # Load and test model on test set
     data_loader_test = data_selector(cgf['DATASET_TEST']['name'], cgf['DATASET_TEST']['arguments'])
     print('\nDATASET TEST')
     print(data_loader_test)
     
     test_data, test_labels, _ = data_loader_test.load_data()
+    
+    '''
+    test_labels = to_onehot(test_labels)
+    '''
+
+    if loss_type == 'SparseCategoricalCrossentropy':
+
+        test_labels = np.reshape(test_labels, (-1))
+        test_labels += 1
+
+    test_data = tf.convert_to_tensor(test_data)
+    test_labels = tf.convert_to_tensor(test_labels)
 
     if (cgf['MODEL']['name'] == "resnet") or (cgf['MODEL']['name'] == "vgg16"):
         test_data = np.repeat(test_data,3,-1)
