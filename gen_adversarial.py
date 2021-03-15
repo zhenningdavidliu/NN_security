@@ -12,6 +12,11 @@ from os.path import join
 import matplotlib.pyplot as plt
 import sys
 from adversarial_attacks.spsa import spsa, spsa_T1
+from adversarial_attacks.df_attacks import FGSM_attack
+from tensorflow.keras.applications.resnet50 import preprocess_input as res_prep
+from tensorflow.keras.applications.vgg16 import preprocess_input as vgg_prep
+from tensorflow.keras.losses import SparseCategoricalCrossentropy
+from tensorflow.keras.metrics import SparseCategoricalAccuracy
 
 
 def create_adversarial_pattern(input_image, input_label, pretrained_model):
@@ -60,24 +65,42 @@ Use gpu: {}""".format(use_gpu))
     sess = tf.compat.v1.Session(config=tf_config)
     #K.v1.set_session(sess)
  
-    train_data = np.load(cgf["DATASET_TRAIN"]["arguments"]["images"])
-    train_labels = np.load(cgf["DATASET_TRAIN"]["arguments"]["labels"])
-  
+    data_loader = data_selector(cgf['DATASET']['name'], cgf['DATASET']['arguments'])
+
+    data, labels, _ = data_loader.load_data() 
+
+    '''
+    data = np.load(cgf["DATASET"]["arguments"]["images"])
+    labels = np.load(cgf["DATASET"]["arguments"]["labels"])
+    '''
+
     # Get input and output shape
-    input_shape = train_data.shape[1:]
-    output_shape = train_labels.shape[1];
+    input_shape = data.shape[1:]
+    output_shape = labels.shape[1];
     print('input_shape', input_shape)
     # Set the default precision 
     model_precision = cgf['MODEL_METADATA']['precision']
     K.set_floatx(model_precision)
 
-    model_id = cgf['DATASET_TRAIN']['arguments']['model']
+    model_id = cgf['MODEL_METADATA']['model_number_arguments']['model_id']
     model_path = join('model', str(model_id))
+    filepath = cgf['MODEL_METADATA']['save_best_model']['arguments']['filepath']
+    attack = cgf['ATTACK']['name']
 
-    adv_data = cgf['DATASET_TRAIN']['arguments']["adv_images"]
-    adv_labels = cgf['DATASET_TRAIN']['arguments']['adv_labels']
+    adv_data = cgf['DATASET']['arguments']["adv_images"]
+    adv_labels = cgf['DATASET']['arguments']['adv_labels']
 
-    weights_path = join(model_path, "keras_model_files.h5")
+    weights_path = join(model_path, filepath)
+
+    optimizer = cgf['TRAIN']['optim']['type']
+    loss_type = cgf['TRAIN']['loss']['type']
+    metric_list = list(cgf['TRAIN']['metrics'].values())
+
+    if loss_type == 'SparseCategoricalCrossentropy':
+        loss_type = SparseCategoricalCrossentropy(from_logits=False)
+        metric_list = [SparseCategoricalAccuracy()]
+        output_shape = 2
+        labels = np.reshape(labels, (-1))
 
     model_name = cgf['MODEL']['name']
     model_arguments = cgf['MODEL']['arguments']
@@ -85,9 +108,13 @@ Use gpu: {}""".format(use_gpu))
 
     model.load_weights(weights_path)
 
-    optimizer = cgf['TRAIN']['optim']['type']
-    loss_type = cgf['TRAIN']['loss']['type']
-    metric_list = list(cgf['TRAIN']['metrics'].values())
+    # Preprocessing
+    if model_name =='resnet':
+        preprocessing = res_prep
+    elif model_name == 'vgg16':
+        preprocessing = vgg_prep
+    else:
+        preprocessing = None 
 
     model.compile(optimizer=optimizer,
                   loss=loss_type,
@@ -99,25 +126,44 @@ Use gpu: {}""".format(use_gpu))
     adv_lab = []
 
     data_size = 50
+    
+    if attack == 'spsa':
+        for i in range(data_size): 
+            colors = set(data[i].flatten())
+            colors = [colors.pop(),colors.pop(),colors.pop()]
+            color_diff = [abs(colors[0]-colors[1]), abs(colors[0]-colors[2]), abs(colors[1]-colors[2])]
+            lower = min(color_diff)
 
-    for i in range(data_size): 
-        colors = set(train_data[i].flatten())
-        colors = [colors.pop(),colors.pop(),colors.pop()]
-        color_diff = [abs(colors[0]-colors[1]), abs(colors[0]-colors[2]), abs(colors[1]-colors[2])]
-        lower = min(color_diff)
+            epsilon = lower/4
+            delta = epsilon/8
+            alpha = delta
+            T = 20
+            n = 5
 
-        epsilon = lower/4
-        delta = epsilon/8
-        alpha = delta
-        T = 20
-        n = 5
+            candidates = spsa_T1(model, data[i], delta, alpha, n, epsilon, T)
+            for cand in candidates:
+                cand = np.expand_dims(cand, axis=0)
+                if round(model.predict(cand)[0,0]) !=  labels[i][0]:
+                    adversarials.append(cand)
+                    adv_lab.append(labels[i])
 
-        candidates = spsa_T1(model, train_data[i], delta, alpha, n, epsilon, T)
-        for cand in candidates:
-            cand = np.expand_dims(cand, axis=0)
-            if round(model.predict(cand)[0,0]) !=  train_labels[i][0]:
-                adversarials.append(cand)
-                adv_lab.append(train_labels[i])
+    elif attack == 'FGSM':
+        for i in range(data_size): 
+            colors = set(data[i].flatten())
+            colors = [colors.pop(),colors.pop(),colors.pop()]
+            color_diff = [abs(colors[0]-colors[1]), abs(colors[0]-colors[2]), abs(colors[1]-colors[2])]
+            lower = min(color_diff)
+
+            epsilon = lower/4
+
+            candidates = FGSM_attack(model, preprocessing, data[i], labels[i], epsilon)
+            print(candidates)
+            '''
+            for cand in candidates:
+                if round(model.predict(cand)[0,0]) !=  labels[i][0]:
+                    adversarials.append(cand)
+                    adv_lab.append(labels[i])
+            '''
 
 
     print(adversarials)
@@ -140,6 +186,6 @@ Use gpu: {}""".format(use_gpu))
         plt.subplot(grid_y, grid_x, i+1)
         plt.matshow(adversarials[idx], cmap = 'gray', fignum=False)
         plt.axis('off')
-        plt.title('Label: {}, neural net predicts: {}'.format(int(train_labels[idx]), int(ans[idx])))
+        plt.title('Label: {}, neural net predicts: {}'.format(int(labels[idx]), int(ans[idx])))
 
     plt.show()
