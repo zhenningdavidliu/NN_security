@@ -1,0 +1,14 @@
+DATA:
+    name: 'shades2'
+    arguments:
+        number_of_samples: 100
+        grid_size: 224
+        side_length: 8
+        shade_contrast: 0.15
+        separate: 0
+        save: True
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/demo_shades_test_images"
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/demo_shades_test_labels"
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/demo_shades_test_diff"
+        noise: True
+        model: 1
