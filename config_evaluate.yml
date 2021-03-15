@@ -1,7 +1,12 @@
 MODEL:
-    model_id: 1 
+    name: resnet
+    model_id: 2 
     model_dest: model
-
+    arguments:
+        act: relu
+        final_act: sigmoid
+        bias_initializer: zeros
+        filepath : best_model_resnet.h5
 DATASET:
     use_default: no 
     #name: 'shades3'
@@ -32,16 +37,18 @@ DATASET:
     #    labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_eval_labels.npy"
     #    difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_eval_difference.npy"
 
-    name: shades2 
+    name: 'existing' 
     arguments:
         number_of_samples: 1000
-        grid_size: 128 
+        grid_size: 224 
         side_length: 8
-        shade_contrast: 0.1
+        shade_contrast: 0.15
         separate: 0
         corners: [1,2,4]
         save: False
-        images: ""
-        labels: ""
-        difference: ""
-        model: 1
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_test_images"
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_test_labels"
+
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_test_difference"
+
+        model: 2 

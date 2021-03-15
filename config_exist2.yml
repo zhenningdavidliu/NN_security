@@ -2,10 +2,17 @@ DATASET_TRAIN:
     
     name: 'existing'
     arguments:
-        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_train_images"
-        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_train_labels"
-        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_train_difference"
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_images"
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_labels"
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_difference"
         model: 1
+        number_of_samples: 10000
+        grid_size: 224
+        side_length: 8
+        shade_contrast: 0.15
+        separate: 0
+        noise: True
+        save: True
 
     #name: stripe_train
     #arguments:
@@ -17,11 +24,17 @@ DATASET_TRAIN:
 DATASET_VAL:
     name: 'existing'
     arguments:
-        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_val_images"
-        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_val_labels"
-        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_val_difference"
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_val_images"
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_val_labels"
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_val_difference"
         model: 1
-
+        number_of_samples: 2000
+        grid_size: 224
+        side_length: 8
+        shade_contrast: 0.15
+        separate: 0
+        noise: True
+        save: True
     #name: stripe_test
     #arguments:
     #    grid_size: 32
@@ -34,11 +47,17 @@ DATASET_VAL:
 DATASET_TEST:
     name: 'existing'
     arguments:
-        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_test_images"
-        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_test_labels"
-        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_test_difference"
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_test_images"
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_test_labels"
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_test_difference"
         model: 1
-
+        number_of_samples: 1000
+        grid_size: 224
+        side_length: 8
+        shade_contrast: 0.15
+        separate: 0
+        noise: True
+        save: True
 #    name: stripe_test
 #    arguments:
 #        grid_size: 32
@@ -49,7 +68,7 @@ DATASET_TEST:
 #        low_a_value: 0.000
 
 MODEL:
-    name: fc3
+    name: fc3 
     arguments:
         act: relu
         final_act: none
@@ -61,7 +80,7 @@ MODEL_METADATA:
     dest_model: model
     model_number_type: fixed
     model_number_arguments:
-        model_id: 20
+        model_id: 25
         counter_path: ./
     save_best_model:
         use_model_checkpoint: yes
@@ -102,7 +121,7 @@ TRAIN:
 
 COMPUTER_SETUP:
     use_gpu: yes
-    compute_node: 2
+    compute_node: 3
 
 INFORMATION_TRAIN:
     save_every: 10

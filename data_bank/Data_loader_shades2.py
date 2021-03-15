@@ -1,6 +1,9 @@
 from .Data_loader import Data_loader
 import numpy as np
 import random
+import sys
+import yaml
+
 class Data_loader_shades2(Data_loader):
     """
 This experiment is creating squares collored in different shades of grey and checking how humans and AI compare in both
@@ -98,6 +101,7 @@ Model : %s
         e = self.shade_contrast
         noise = self.noise
 
+        noiseless_data = np.ones([n,a,a])
         data = np.ones([n,a,a])
         label = np.zeros([n,1])
         diff = np.zeros(n)
@@ -105,7 +109,7 @@ Model : %s
         
 
         for i in range(n):
-            
+                
             shade1 = 0
             shade2 = 0
 
@@ -193,32 +197,37 @@ Model : %s
             if shade1>shade2:
                 label[i] = 1 # Left is brighter
 
+            noiseless_data[i] = data[i]
 
             if noise:
+                
+                epsilon_noise = min(abs(shade1-shade2), 1-shade1, 1-shade2)
+                data[i, :, :] += np.random.uniform(-epsilon_noise/4, epsilon_noise/4, (a, a)) 
+                for j in range(a):
+                    for k in range(a):
+                        data[i, j, k] = max(min(data[i, j, k], 1),0) # THIS LINE IS TO ENSURE THE BACKROUND IS WHITE
 
-                epsilon_noise = min(shade1, shade2, abs(shade1-shade2), 1-shade1, 1-shade2)/4
-                data[i, :, :] += np.random.uniform(0, epsilon_noise, (a, a)) 
-
-
+        noiseless_data = np.expand_dims(noiseless_data, axis = 3)
         data = np.expand_dims(data, axis = 3)
 
         image_link = self.images
         label_link = self.labels
         diff_link = self.difference
 
+        noiseless_image_link = image_link + 'noiseless' + str(model_number) + ".npy"
         image_link = image_link + str(model_number) + ".npy"
         label_link = label_link + str(model_number) +".npy"
         diff_link = diff_link + str(model_number) + ".npy"
         
         if self.save == True:
+            np.save(noiseless_image_link, noiseless_data)
             np.save(image_link, data)
             np.save(label_link, label)
             np.save(diff_link, diff)
-        print("Data shades2 generated. Amount: {}".format(n))
 
         return data, label, diff
 
-
+    
 
          
 

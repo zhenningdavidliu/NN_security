@@ -1,17 +1,19 @@
 
 data_name: shades2
 data_arguments:
-    number_of_samples: 500
-    grid_size: 150 
+    number_of_samples: 30
+    grid_size: 224 
     side_length: 8
-    shade_contrast: 0.1
+    shade_contrast: 0.15
     separate: 0
     corners: [1,2,4]
     save: False
-    images: ""
+    images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_vis_images
+"
     labels: ""
     difference: ""
-    model: 1
+    model: 3
+    model_dest: model
 
 #data_name: contrast 
 #data_arguments:

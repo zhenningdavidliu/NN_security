@@ -36,22 +36,53 @@ Keras model
         return build_model_cnndrop(input_shape, output_shape, arguments)
     elif model_name.lower() == "resnet":
         return build_model_resnet(output_shape, arguments, input_shape)
+    elif model_name.lower() == "resnet_load":
+        return build_model_resnet_load(output_shape, arguments, input_shape)
     elif model_name.lower() == "vgg16":
         return build_model_vgg16(output_shape, arguments, input_shape)
     else:
         print('Error: Could not find model with name %s' % (model_name))
         return None;
 
-def build_model_resnet(output_shape, arguments, input_shape=(224, 224, 3)):
-   
+def build_model_resnet(output_shape, arguments, input_shape=(224, 224, 1)):
+    
+    # colored (224, 224, 3) 
     inputs = Input(shape=input_shape)
     final_act = arguments['final_act']
 
-    y = ResNet50(input_tensor = inputs, weights = None, include_top=False)
+    z = ResNet50(input_tensor = inputs, weights = None, include_top=False)
+    # weights = 'imagenet'
 
-    y = Flatten(name="flatten")(y.output)
+    for layer in z.layers:
+        layer.trainable = False
+
+    y = Flatten(name="flatten")(z.output)
     
-    output = Dense(output_shape, activation=final_act)(y)
+    if final_act == 'none':
+        output = Dense(output_shape)(y)
+    else:
+        output = Dense(output_shape, activation=final_act)(y) 
+
+    model = Model(inputs, output)
+
+    return model
+
+def build_model_resnet_load(output_shape, arguments, input_shape=(224, 224, 3)):
+    
+    inputs = Input(shape=input_shape)
+    final_act = arguments['final_act']
+
+    z = ResNet50(input_tensor = inputs, weights = 'imagenet', include_top=False)
+
+    for layer in z.layers:
+        layer.trainable = True   
+    
+    y = Flatten(name="flatten")(z.output)
+    
+    if final_act == 'none':
+        output = Dense(output_shape)(y)
+    else:
+        output = Dense(output_shape, activation=final_act)(y) 
 
     model = Model(inputs, output)
 
@@ -88,38 +119,25 @@ def residual_block(x: Tensor, downsample: bool, filters: int, kernel_size: int=3
     out = relu_bn(out)
     return out
 
-'''
-def build_model_resnet(output_shape, arguments, input_shape=(224,224,3)):
+def build_model_vgg16(output_shape, arguments, input_shape=(224,224,1)):
 
-    inputs = Input(shape=(input_shape))
-    num_filters = 64
-
-    t = BatchNormalization()(inputs)
-    t = Conv2D(kernel_size=3,
-            strides=1,
-            filters=num_filters,
-            padding="same")(t)
-    t = relu_bn(t)
-
-    num_blocks_list = [2, 5, 5, 2]
     
-    for i in range(len(num_blocks_list)):
-        num_blocks = num_blocks_list[i]
-
-
-    return model
-'''
-
-def build_model_vgg16(output_shape, arguments, input_shape=(224,224,3)):
-
+    inputs = Input(shape=input_shape)
     final_act = arguments['final_act']
 
-    model = Sequential()
+    z = VGG16(input_tensor = inputs, weights = None, include_top=False)
 
-    model.add(VGG16(include_top=False, input_shape = input_shape))
+    for layer in z.layers:
+        layer.trainable = False
 
-    model.add(Flatten())
-    model.add(Dense(output_shape,activation=final_act))
+    y = Flatten(name="flatten")(z.output)
+    
+    if final_act == 'none':
+        output = Dense(output_shape)(y)
+    else:
+        output = Dense(output_shape, activation=final_act)(y) 
+
+    model = Model(inputs, output)
 
     return model
 
@@ -140,7 +158,11 @@ def build_model_cnndrop(input_shape, output_shape, arguments):
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.4))
 
-    model.add(Dense(output_shape, activation=final_act)) 
+    if final_act == 'none':
+        model.add(Dense(output_shape))
+    else:
+        model.add(Dense(output_shape, activation=final_act)) 
+
 
     return model
 
@@ -157,7 +179,11 @@ def build_model_fc3(input_shape, output_shape, arguments):
     model.add(MaxPooling2D(pool_size=(2,2), padding='same', strides=None))
     model.add(Flatten())	
     model.add(Dense(10))
-    model.add(Dense(output_shape, activation=final_act)) 
+    
+    if final_act == 'none':
+        model.add(Dense(output_shape))
+    else:
+        model.add(Dense(output_shape, activation=final_act)) 
 
     return model
 
@@ -169,7 +195,12 @@ def build_model_fc2(input_shape, output_shape, arguments):
     model=Sequential()
     model.add(Flatten(input_shape = input_shape))
     model.add(Dense(8,activation = act, use_bias=True)) #, bias_initializer= bias))#, activity_regularizer = regularizers.l1(0.01)))
-    model.add(Dense(output_shape, activation=final_act, use_bias=True))#, activity_regularizer=regularizers.l1(0.01)))
+
+    if final_act == 'none':
+        model.add(Dense(output_shape, use_bias = True))
+    else:
+        model.add(Dense(output_shape, activation=final_act, use_bias=True)) 
+
 
     return model
 
@@ -187,7 +218,12 @@ def build_model_fc2_cheat(input_shape, output_shape, arguments):
     model=Sequential()
     model.add(Flatten(input_shape = input_shape))
     model.add(Dense(32,activation = act, weights =[weights_0,bias_0])) 
-    model.add(Dense(output_shape, activation=final_act))#, weights =[weights_1,bias_1]))
+
+    if final_act == 'none':
+        model.add(Dense(output_shape))
+    else:
+        model.add(Dense(output_shape, activation=final_act)) 
+
 
     return model
 
@@ -202,7 +238,12 @@ def build_model_cnn2(input_shape, output_shape, arguments):
     model.add(MaxPooling2D(pool_size=(2,2), padding='same', strides=None))
     model.add(Flatten())	
     model.add(Dense(10))
-    model.add(Dense(output_shape, activation=final_act)) 
+
+    if final_act == 'none':
+        model.add(Dense(output_shape))
+    else:
+        model.add(Dense(output_shape, activation=final_act)) 
+
 
     return model
 
@@ -219,7 +260,12 @@ def build_model_cnn3(input_shape, output_shape, arguments):
     model.add(MaxPooling2D(pool_size=(2,2), padding='same', strides=None))
     model.add(Flatten())	
     model.add(Dense(20))
-    model.add(Dense(output_shape, activation=final_act)) 
+
+    if final_act == 'none':
+        model.add(Dense(output_shape))
+    else:
+        model.add(Dense(output_shape, activation=final_act)) 
+
 
     return model
 
@@ -238,6 +284,11 @@ def build_model_cnn4(input_shape, output_shape, arguments):
     model.add(MaxPooling2D(pool_size=(2,2), padding='same', strides=None))
     model.add(Flatten())	
     model.add(Dense(20))
-    model.add(Dense(output_shape, activation=final_act)) 
+
+    if final_act == 'none':
+        model.add(Dense(output_shape))
+    else:
+        model.add(Dense(output_shape, activation=final_act)) 
+
 
     return model
