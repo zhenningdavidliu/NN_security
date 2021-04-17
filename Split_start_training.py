@@ -33,7 +33,7 @@ if __name__ == "__main__":
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
     
     # Load configuration file
-    configfile = 'config_exist.yml'
+    configfile = 'config_exist2.yml'
     with open(configfile) as ymlfile:
         cgf = yaml.load(ymlfile, Loader=yaml.SafeLoader);
 
@@ -158,7 +158,7 @@ stopping_criteria: {}""".format(loss_type, optimizer, batch_size, shuffle_data,
     print('')
     
     #model = tf.keras.models.load_model('model/300/best_model_resnet.h5')
-    model.load_weights('model/101/best_model_vgg16.h5', by_name= True, skip_mismatch=True)
+    model.load_weights('model/201/best_model_resnet.h5', by_name= True, skip_mismatch=True)
 
     opt = tf.keras.optimizers.Adam() 
     # Compile model

@@ -10,7 +10,7 @@ from .Data_loader_shades3 import Data_loader_shades3
 from .Data_loader_snake import Data_loader_snake
 from .Data_loader_contrast import Data_loader_contrast
 from .Data_loader_existing import Data_loader_existing
-
+from .Data_loader_shades_uniform import Data_loader_shades_uniform
 def data_selector(data_name, arguments):
     """ Select a data loader based on `data_name` (str).
 Arguments
@@ -51,6 +51,8 @@ and it returns None.
         return Data_loader_snake(arguments)
     elif (data_name.lower() == 'contrast'):
         return Data_loader_contrast(arguments)
+    elif (data_name.lower() == 'shades_uniform'):
+        return Data_loader_shades_uniform(arguments)
     else:
         print('Error: Could not find data loader with name %s' % (data_name))
         return None;

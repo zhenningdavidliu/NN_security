@@ -7,8 +7,8 @@ from data_bank import data_selector
 from tensorflow.keras import backend as K
 #from tensorflow.keras.models import Sequential
 #from tensorflow.keras.layers import Dense, Activation, Conv1D, Conv2D, Flatten
-from tensorflow.keras.resnet50 import preprocess_input as res_prep
-from tensorflow.keras.vgg16 import preprocess_input as vgg_prep
+from tensorflow.keras.applications.resnet50 import preprocess_input as res_prep
+from tensorflow.keras.applications.vgg16 import preprocess_input as vgg_prep
 import os
 from os.path import join
 #from PIL import Image
@@ -39,6 +39,8 @@ def print_certainty_vs_distance_table(N, M, results, diff):
     len_dist_bd = len(fline);
     print((len_dist_bd+int((N/2)*11 - 8 ))*" " + "Network certainty")
 
+    data_size = len(results)
+    
     for i in range(N):
         int_N = i*dN
         int_N_up = (i+1)*dN
