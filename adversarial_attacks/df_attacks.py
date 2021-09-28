@@ -74,7 +74,7 @@ def attack_network(attack, model, model_name, pre, image, label, epsilon):
     if (model_name == 'resnet')^(model_name == 'vgg16'):
         fmodel = fb.models.TensorFlowModel(model, bounds = (-122,123) , device = None, preprocessing = prep)
     else:
-        fmodel = fb.models.TensorFlowModel(model, bounds = (0,1) , device = None, preprocessing = prep)
+        fmodel = fb.models.TensorFlowModel(model, bounds = (-122,123) , device = None, preprocessing = prep)
     attack = eval(attack+'()')
     
     image = image.reshape((1, 224, 224, 1))

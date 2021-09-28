@@ -1,14 +1,14 @@
 DATA:
-    name: 'shades2'
+    name: 'shades_uniform'
     arguments:
-        number_of_samples: 100
+        number_of_samples: 2000
         grid_size: 224
         side_length: 8
-        shade_contrast: 0.15
+        shade_contrast: 0
         separate: 0
         save: True
-        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/demo_shades_test_images"
-        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/demo_shades_test_labels"
-        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/demo_shades_test_diff"
+        images: "/itf-fi-ml/home/znliu/data/shades_data/shades_uniform_test_images"
+        labels: "/itf-fi-ml/home/znliu/data/shades_data/shades_uniform_test_labels"
+        difference: "/itf-fi-ml/home/znliu/data/shades_data/shades_uniform_test_diff"
         noise: True
         model: 1

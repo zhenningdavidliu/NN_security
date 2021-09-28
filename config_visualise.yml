@@ -1,5 +1,4 @@
-
-data_name: shades2
+data_name: 'existing'
 data_arguments:
     number_of_samples: 30
     grid_size: 224 
@@ -8,11 +7,10 @@ data_arguments:
     separate: 0
     corners: [1,2,4]
     save: False
-    images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/shades_vis_images
-"
-    labels: ""
+    images: "/itf-fi-ml/home/znliu/data/shades_data/adv_attacks_images_resnet_any"
+    labels: "/itf-fi-ml/home/znliu/data/shades_data/adv_attacks_labels_resnet_any"
     difference: ""
-    model: 3
+    model: 1
     model_dest: model
 
 #data_name: contrast 

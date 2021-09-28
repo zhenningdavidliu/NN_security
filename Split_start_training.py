@@ -33,7 +33,7 @@ if __name__ == "__main__":
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
     
     # Load configuration file
-    configfile = 'config_exist2.yml'
+    configfile = 'config_continue.yml'
     with open(configfile) as ymlfile:
         cgf = yaml.load(ymlfile, Loader=yaml.SafeLoader);
 
@@ -85,7 +85,7 @@ Use gpu: {}""".format(use_gpu))
         #val_data= res_prep(val_data)
     
     elif cgf['MODEL']['name'] == 'vgg16':
-        train_data = 255*train_data
+        train_data = 255*train_data - 122
         # train_data = np.repeat(train_data,3,-1)
         val_data = 255*val_data - 122
         # val_data = np.repeat(val_data,3,-1)
@@ -158,7 +158,8 @@ stopping_criteria: {}""".format(loss_type, optimizer, batch_size, shuffle_data,
     print('')
     
     #model = tf.keras.models.load_model('model/300/best_model_resnet.h5')
-    model.load_weights('model/201/best_model_resnet.h5', by_name= True, skip_mismatch=True)
+    model.load_weights('model/302/best_model_resnet.h5', by_name= True, skip_mismatch=True)
+
 
     opt = tf.keras.optimizers.Adam() 
     # Compile model

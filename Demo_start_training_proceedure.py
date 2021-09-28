@@ -69,13 +69,16 @@ Use gpu: {}""".format(use_gpu))
     val_labels = to_onehot(val_labels)
     '''
 
+    #preprocess
+
+    train_data = 255*train_data - 122
+    val_data = 255*val_data - 122
+    
     # Trying for resnet since memory seems to be the issue
-    train_data = tf.convert_to_tensor(train_data[:3000,:,:])
-    train_labels = tf.convert_to_tensor(train_labels[:3000] )
+    train_data = tf.convert_to_tensor(train_data)
+    train_labels = tf.convert_to_tensor(train_labels)
     val_data = tf.convert_to_tensor(val_data)
     val_labels = tf.convert_to_tensor(val_labels)
-
-
 
 
     if (cgf['MODEL']['name'] == "resnet") or (cgf['MODEL']['name'] == "vgg16"):
@@ -292,6 +295,9 @@ Model dest: {}""".format(model_number_type, model_number, dest_model))
 
         test_labels = np.reshape(test_labels, (-1))
         test_labels += 1
+
+    #preprocess
+    test_data = test_data*255-122
 
     test_data = tf.convert_to_tensor(test_data)
     test_labels = tf.convert_to_tensor(test_labels)

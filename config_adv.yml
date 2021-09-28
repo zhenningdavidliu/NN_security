@@ -9,32 +9,33 @@ DATASET:
         number_of_samples: 1
         grid_size: 224
         side_length: 8
-        shade_contrast: 0.15
+        shade_contrast: 0
         separate: 0
         corners: [1, 2, 4]
         save: True 
-        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_imagesnoiseless" 
-        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_labels" 
-        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_difference" 
-        original_images: "data/original_images_resnet_L2DF2"
-        adv_images: "data/adv_images_resnet_L2DF2"
-        adv_labels: "data/adv_labels_resnet_L2DF2"
+        images: "/itf-fi-ml/home/znliu/data/shades_data/fixed_shades_train_nosep_imagesnoiseless" 
+        labels: "/itf-fi-ml/home/znliu/data/shades_data/fixed_shades_train_nosep_labels" 
+        difference: "/itf-fi-ml/home/znliu/data/shades_data/fixed_shades_train_nosep_difference" 
+        original_images: "data/original_images_cnndrop_L2DF2"
+        adv_images: "/itf-fi-ml/home/znliu/data/shades_data/adv_attacks_images_cnndrop_any_fix"
+        adv_labels: "/itf-fi-ml/home/znliu/data/shades_data/adv_attacks_labels_cnndrop_any_fix"
+        adv_diffs: "/itf-fi-ml/home/znliu/data/shades_data/adv_attacks_diff_cnndrop_any_fix"
         model: 1
     train_arguments:
         number_of_samples: 1
         grid_size: 224
         side_length: 8
-        shade_contrast: 0.15
+        shade_contrast: 0
         separate: 0
         corners: [1, 2, 4]
         save: True 
-        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_images"
-        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_labels" 
-        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_difference" 
+        images: "/itf-fi-ml/home/znliu/data/shades_data/fixed_shades_train_nosep_images"
+        labels: "/itf-fi-ml/home/znliu/data/shades_data/fixed_shades_train_nosep_labels" 
+        difference: "/itf-fi-ml/home/znliu/data/shades_data/fixed_shades_train_nosep_difference" 
         model: 1
 
 MODEL:
-    name: resnet
+    name: cnndrop
     arguments:    
         act: relu
         final_act: sigmoid
@@ -46,12 +47,12 @@ MODEL_METADATA:
     dest_model: model
     model_number_type: fixed
     model_number_arguments:
-        model_id: 300
+        model_id: 800
         counter_path: ./
     save_best_model:
         use_model_checkpoint: yes
         arguments:
-            filepath: best_model_resnet.h5
+            filepath: best_model_cnndrop.h5
             monitor: val_acc
             verbose: 1
             save_best_only: False
@@ -84,7 +85,7 @@ TRAIN:
 
 COMPUTER_SETUP:
     use_gpu: yes
-    compute_node: 2
+    compute_node: 1
 
 INFORMATION_TRAIN:
     save_every: 10

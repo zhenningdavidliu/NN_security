@@ -1,10 +1,11 @@
 DATASET_TRAIN:
     
-    name: 'existing'
+    name: 'shades_uniform'
     arguments:
-        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_images"
-        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_labels"
-        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_difference"
+        number_of_samples: 10000
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_nosep_images"
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_nosep_labels"
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_nosep_difference"
         model: 1
 
     #name: stripe_train
@@ -15,11 +16,12 @@ DATASET_TRAIN:
     #    flip_a_values: False
 
 DATASET_VAL:
-    name: 'existing'
+    name: 'shades_uniform'
     arguments:
-        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_val_images"
-        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_val_labels"
-        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_val_difference"
+        number_of_samples: 2000
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_val_nosep_images"
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_val_nosep_labels"
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_val_nosep_difference"
         model: 1
 
     #name: stripe_test
@@ -32,11 +34,12 @@ DATASET_VAL:
     #    low_a_value: 0.000
 
 DATASET_TEST:
-    name: 'existing'
+    name: 'shades_uniform'
     arguments:
-        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_test_images"
-        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_test_labels"
-        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_test_difference"
+        number_of_samples: 1000
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_test_nosep_images"
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_test_nosep_labels"
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_test_nosep_difference"
         model: 1
 
 #    name: stripe_test
@@ -49,7 +52,7 @@ DATASET_TEST:
 #        low_a_value: 0.000
 
 MODEL:
-    name: vgg16
+    name: resnet50
     arguments:    
         act: relu
         final_act: none
@@ -61,12 +64,12 @@ MODEL_METADATA:
     dest_model: model
     model_number_type: fixed
     model_number_arguments:
-        model_id: 400
+        model_id: 304
         counter_path: ./
     save_best_model:
         use_model_checkpoint: yes
         arguments:
-            filepath: best_model_vgg16.h5
+            filepath: best_model_resnet50.h5
             monitor: val_acc
             verbose: 1
             save_best_only: False
@@ -99,7 +102,7 @@ TRAIN:
 
 COMPUTER_SETUP:
     use_gpu: yes
-    compute_node: 0
+    compute_node: 3
 
 INFORMATION_TRAIN:
     save_every: 10

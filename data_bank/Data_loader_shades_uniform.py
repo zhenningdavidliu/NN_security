@@ -190,10 +190,13 @@ Model : %s
             for j in range(i2,i2+2*l):
                 for k in range(j2,j2+2*l):
                     data[i,j,k]=shade2
-            diff[i] = (shade1 - shade2 + 0.8)/1.6 # the 0.8 and 1.6 are for normalization 
+            diff[i] = difference_shades 
             
             if shade1>shade2:
                 label[i] = 1 # Left is brighter
+                diff[i] = 0.5 + difference_shades/2  
+            else:
+                diff[i] = 0.5 - difference_shades/2
 
             noiseless_data[i] = data[i]
 
