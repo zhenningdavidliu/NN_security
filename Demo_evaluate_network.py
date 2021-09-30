@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
     os.environ['CUDA_VISIBLE_DEVICES']= "-1"
 
-    with open('config_evaluate.yml') as ymlfile:
+    with open('config_files/config_evaluate.yml') as ymlfile:
         cgf_eval = yaml.load(ymlfile, Loader= yaml.SafeLoader)
 
     model_id = cgf_eval['MODEL']['model_id']

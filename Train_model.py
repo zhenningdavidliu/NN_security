@@ -57,7 +57,7 @@ if __name__ == "__main__":
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
     
     # Load configuration file
-    with open('config_lines.yml') as ymlfile:
+    with open('config_files/config_lines.yml') as ymlfile:
         cgf = yaml.load(ymlfile, Loader=yaml.SafeLoader);
 
     # Set up computational resource 

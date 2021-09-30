@@ -14,6 +14,8 @@ Unlike shades experiment, shades2 has the option of adding some false structures
 
 We also allow the possibility for background noise according to Task 1. This is set by the boolean variable "noise".
 
+Here the randomness is uniform in the choice of shade1 and shade2. Hence the difference IS NOT uniformly distributed. For that experiment, refer to Data_loader_shades_uniform.py
+
 Attributes
 ----------
 number_of_samples (int): Number of images generated for the test

@@ -1,0 +1,54 @@
+MODEL:
+    name: resnet
+    model_id: 2 
+    model_dest: model
+    arguments:
+        act: relu
+        final_act: sigmoid
+        bias_initializer: zeros
+        filepath : best_model_resnet.h5
+DATASET:
+    use_default: no 
+    #name: 'shades3'
+    #arguments:
+    #    number_of_samples: 5000
+    #    grid_size: 256
+    #    side_length: 8
+    #    shade_contrast: 0.1
+    #    corners: [3]
+    #name: stripe_test
+    #arguments:
+    #    grid_size: 32
+    #    line_width:  3
+    #    a: 0.01
+    #    flip_a_values: False 
+    #    data_size: 10000
+    #    low_a_value: 0.000
+    #name: lines
+    #arguments:
+    #    number_of_samples: 1000
+    #    grid_size: 224
+    #    side_length: 50
+    #    width: 4
+    #    shift: True
+    #    color_shift: -0.01
+    #    save: True
+    #    images: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_eval_images.npy"
+    #    labels: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_eval_labels.npy"
+    #    difference: "/mn/kadingir/vegardantun_000000/nobackup/NN_security_data/data/data_eval_difference.npy"
+
+    name: 'existing' 
+    arguments:
+        number_of_samples: 1000
+        grid_size: 224 
+        side_length: 8
+        shade_contrast: 0.15
+        separate: 0
+        corners: [1,2,4]
+        save: False
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_test_images"
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_test_labels"
+
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/shades_test_difference"
+
+        model: 2 

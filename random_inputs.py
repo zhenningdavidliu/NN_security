@@ -27,7 +27,7 @@ def random_labeled_data(data_size,randomness, param):
 
     """
 
-    with open('configfiles/config_random.yml') as ymlfile:
+    with open('config_files/config_random.yml') as ymlfile:
         cgf = yaml.load(ymlfile, Loader=yaml.SafeLoader);
     n = cgf['DATASET_TRAIN']['arguments']['grid_size']
     input_shape = (n,n,1)

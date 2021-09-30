@@ -10,7 +10,10 @@ This experiment is creating squares collored in different shades of grey and che
 accuracy and confidence estimate. We set the squares to have a fixed length and all squares have to be fully withing the
 image. Further we assing a "shade_contrast" value which tells us how different the shades of grey should be.
 
-Unlike shades experiment, shades_uniform has the option of adding some false structures to it. This is done by the parameter separate (e.g. separate=1 means that the darker square will be on the left half plane whereas the lighter is on the right halfplane). Also unlike shades2 here the random sampling is uniform over the distance to the decision boundary
+
+Unlike shades experiment, shades_uniform has the option of adding some false structures to it. This is done by the parameter separate (e.g. separate=1 means that the darker square will be on the left half plane whereas the lighter is on the right halfplane). Also unlike shades2 here the random sampling is uniform over the distance to the decision boundary. 
+
+The difference is sampled uniformly.
 
 We also allow the possibility for background noise according to Task 1. This is set by the boolean variable "noise".
 

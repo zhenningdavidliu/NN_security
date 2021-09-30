@@ -69,7 +69,7 @@ perform adversarial attack
 
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
-configfile = 'config_adv.yml'
+configfile = 'config_files/config_adv.yml'
 with open(configfile) as ymlfile:
     cgf = yaml.load(ymlfile, Loader =yaml.SafeLoader)
 

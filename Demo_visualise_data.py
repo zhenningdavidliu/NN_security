@@ -27,11 +27,11 @@ if __name__ == "__main__":
     
     os.environ['CUDA_VISIBLE_DEVICES']="-1"
 
-    configfile = 'config_visualise.yml'
+    configfile = 'config_files/config_visualise.yml'
     with open(configfile) as ymlfile:
         cgf = yaml.load(ymlfile, Loader=yaml.SafeLoader);
 
-    configfile1 = 'config.yml'
+    configfile1 = 'config_files/config.yml'
     with open(configfile1) as ymlfile:
         cgf1 =  yaml.load(ymlfile, Loader=yaml.SafeLoader)
 

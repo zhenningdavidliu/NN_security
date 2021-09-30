@@ -1,0 +1,115 @@
+DATASET_TRAIN:
+    
+    name: 'shades_uniform'
+    arguments:
+        number_of_samples: 10000
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_nosep_images"
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_nosep_labels"
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_train_nosep_difference"
+        model: 1
+
+    #name: stripe_train
+    #arguments:
+    #    grid_size: 32
+    #    line_width:  3
+    #    a: 0.01
+    #    flip_a_values: False
+
+DATASET_VAL:
+    name: 'shades_uniform'
+    arguments:
+        number_of_samples: 2000
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_val_nosep_images"
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_val_nosep_labels"
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_val_nosep_difference"
+        model: 1
+
+    #name: stripe_test
+    #arguments:
+    #    grid_size: 32
+    #    line_width:  3
+    #    a: 0.01
+    #    flip_a_values: False 
+    #    data_size: 1000
+    #    low_a_value: 0.000
+
+DATASET_TEST:
+    name: 'shades_uniform'
+    arguments:
+        number_of_samples: 1000
+        images: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_test_nosep_images"
+        labels: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_test_nosep_labels"
+        difference: "/mn/nam-shub-01/scratch/vegarant/NN_security/data/fixed_shades_test_nosep_difference"
+        model: 1
+
+#    name: stripe_test
+#    arguments:
+#        grid_size: 32
+#        line_width:  3
+#        a: 0.01
+#        flip_a_values: True 
+#        data_size: 1000
+#        low_a_value: 0.000
+
+MODEL:
+    name: resnet50
+    arguments:    
+        act: relu
+        final_act: none
+        bias_initializer: zeros
+
+MODEL_METADATA:
+    precision: float64
+    save_final_model: yes
+    dest_model: model
+    model_number_type: fixed
+    model_number_arguments:
+        model_id: 304
+        counter_path: ./
+    save_best_model:
+        use_model_checkpoint: yes
+        arguments:
+            filepath: best_model_resnet50.h5
+            monitor: val_acc
+            verbose: 1
+            save_best_only: False
+            mode: max
+            period: 1
+
+TRAIN:
+    batch_size: 70 
+    shuffle: no
+    validate_every: 1000
+    optim:
+        type: adam
+        arguments:
+            param1: none
+    max_epoch: 100
+    stopping_criteria:
+        type: epoch
+        arguments:
+            monitor: val_acc
+            mode: auto
+            verbose: 1
+            patience: 5
+
+    loss:
+        type: SparseCategoricalCrossentropy
+        arguments:
+            param1: none
+    metrics:
+        metric1: accuracy
+
+COMPUTER_SETUP:
+    use_gpu: yes
+    compute_node: 3
+
+INFORMATION_TRAIN:
+    save_every: 10
+    print_every: 10
+    plot:
+        font_size: 15
+        loss_train: no
+        accuracy_train: no
+
+

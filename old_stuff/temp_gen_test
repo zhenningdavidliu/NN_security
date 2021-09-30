@@ -1,0 +1,9 @@
+#!/bin/bash
+
+rm experimentt/wrong/picture_*
+rm experimentt/all/picture_*
+python3 generate_human_test.py
+rm experimentt.zip
+zip -r experimentt.zip experimentt
+rm ../www_docs/experimentt.zip
+cp experimentt.zip ../www_docs

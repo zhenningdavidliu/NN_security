@@ -8,7 +8,7 @@ from shade2_algo import shades2_alg
 
 if __name__ == "__main__":
 
-    configfile = 'config_exist.yml'
+    configfile = 'config_files/config_exist.yml'
     with open(configfile) as ymlfile:
         cgf = yaml.load(ymlfile, Loader=yaml.SafeLoader)
 

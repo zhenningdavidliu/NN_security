@@ -4,7 +4,7 @@ from data_bank import data_selector
 
 if __name__ == '__main__':
     
-    configfile = 'create_images_shades2.yml'
+    configfile = 'config_files/create_images_shades.yml'
     with open(configfile) as ymlfile:
         cgf = yaml.load(ymlfile, Loader=yaml.SafeLoader)
     
