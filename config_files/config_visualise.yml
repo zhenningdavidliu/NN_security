@@ -1,25 +1,24 @@
-data_name: 'existing'
+data_name: "existing"
 data_arguments:
     number_of_samples: 30
-    grid_size: 224 
+    grid_size: 224
     side_length: 8
     shade_contrast: 0.15
     separate: 0
-    corners: [1,2,4]
+    corners: [1, 2, 4]
     save: False
-    images: "/itf-fi-ml/home/znliu/data/shades_data/adv_attacks_images_resnet_any"
-    labels: "/itf-fi-ml/home/znliu/data/shades_data/adv_attacks_labels_resnet_any"
-    difference: "/itf-fi-ml/home/znliu/data/shades_data/adv_attacks_diff_resnet_any"
+    images: "data/shades_data/t0_images"
+    labels: "data/shades_data/t0_labels"
+    difference: "data/shades_data/t0_diff"
     model: 1
     model_dest: model
-
-#data_name: contrast 
+#data_name: contrast
 #data_arguments:
 #    number_of_samples: 300
 #    grid_size: 224
-#    shift: False 
+#    shift: False
 #    epsilon: 1
-#    save: False 
+#    save: False
 #    images: "data_trainn_images"
 #    labels: "data_trainn_labels"
 #    difference: "data_trainn_diff"
@@ -27,7 +26,7 @@ data_arguments:
 #    grid_size: 32
 #    line_width:  3
 #    a: 0.01
-#    flip_a_values: False 
+#    flip_a_values: False
 #    data_size: 1000
 #    low_a_value: 0.009
 #
@@ -41,12 +40,12 @@ data_arguments:
 #data_name: lines_train
 #data_arguments:
 #    number_of_samples: 100
-#    grid_size: 128 
+#    grid_size: 128
 #    side_length: 80
 #    width: 4
 #    shift: True
 #    epsilon: 1
-#    save: False 
+#    save: False
 #    images: "data_trainn_images"
 #    labels: "data_trainn_labels"
 

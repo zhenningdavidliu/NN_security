@@ -1,14 +1,14 @@
 DATA:
-    name: 'shades_uniform'
+    name: "shades2"
     arguments:
-        number_of_samples: 5000
+        number_of_samples: 30
         grid_size: 224
         side_length: 8
-        shade_contrast: 0
+        shade_contrast: 0.15
         separate: 0
+        corners: [1, 2, 4]
         save: True
-        images: "/itf-fi-ml/home/znliu/data/nature_paper_data/uniform_separation_test_images"
-        labels: "/itf-fi-ml/home/znliu/data/nature_paper_data/uniform_separation_test_labels"
-        difference: "/itf-fi-ml/home/znliu/data/nature_paper_data/uniform_separation_test_diff"
-        noise: True
+        images: "data/shades_data/t0_images"
+        labels: "data/shades_data/t0_labels"
+        difference: "data/shades_data/t0_diff"
         model: 1

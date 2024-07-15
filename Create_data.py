@@ -11,5 +11,7 @@ if __name__ == '__main__':
     data_loader = data_selector(cgf['DATA']['name'], cgf['DATA']['arguments'])
 
     images, labels, diff = data_loader.load_data()
-
     print('Data done.')
+
+    # Save the data
+    
