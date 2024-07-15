@@ -7,6 +7,7 @@ DATA:
         shade_contrast: 0.15
         separate: 0
         corners: [1, 2, 4]
+        noise: True
         save: True
         images: "data/shades_data/t0_images"
         labels: "data/shades_data/t0_labels"

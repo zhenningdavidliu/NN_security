@@ -1,8 +1,8 @@
 data_name: "existing"
 data_arguments:
     number_of_samples: 30
-    grid_size: 224
-    side_length: 8
+    grid_size: 120
+    side_length: 20
     shade_contrast: 0.15
     separate: 0
     corners: [1, 2, 4]
